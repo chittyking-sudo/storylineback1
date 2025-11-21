@@ -12,7 +12,7 @@ export class WorldviewAgent {
     this.llm = new LLMService(env);
   }
 
-  async generate(input: AgentInput & { gameType: string; theme: string }): Promise<AgentOutput> {
+  async generate(input: AgentInput & { gameType: string; theme: string }, provider: any = 'openai', model?: string): Promise<AgentOutput> {
     const startTime = Date.now();
     
     try {
@@ -40,7 +40,7 @@ export class WorldviewAgent {
 
 请创建一个详细、有深度且具有可玩性的游戏世界观。`;
 
-      const response = await this.llm.call(userPrompt, systemPrompt, 'openai', 'gpt-4o-mini');
+      const response = await this.llm.call(userPrompt, systemPrompt, provider, model || 'gpt-4o-mini');
       
       // Parse JSON from response
       let parsedData;

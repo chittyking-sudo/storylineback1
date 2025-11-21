@@ -106,6 +106,40 @@ app.get('/', (c) => {
                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition"
                                placeholder="例：幻想大陆冒险">
                     </div>
+                    
+                    <!-- Generation Mode Selection -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">生成模式</label>
+                        <select id="generationMode" required
+                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition">
+                            <option value="full">完整生成（世界观+剧情+角色+对话）</option>
+                            <option value="worldview">仅生成世界观</option>
+                            <option value="worldview-characters">世界观+角色</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Model Selection -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            选择AI模型 
+                            <span class="text-xs text-gray-500">(可多选，支持模型对比)</span>
+                        </label>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                            <label class="flex items-center p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-purple-400 transition">
+                                <input type="checkbox" name="models" value="openai" checked class="mr-2">
+                                <span class="text-sm font-medium">OpenAI GPT-4o-mini</span>
+                            </label>
+                            <label class="flex items-center p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-purple-400 transition">
+                                <input type="checkbox" name="models" value="google" class="mr-2">
+                                <span class="text-sm font-medium">Google Gemini</span>
+                            </label>
+                            <label class="flex items-center p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-purple-400 transition">
+                                <input type="checkbox" name="models" value="openai:gpt-4o" class="mr-2">
+                                <span class="text-sm font-medium">OpenAI GPT-4o</span>
+                            </label>
+                        </div>
+                    </div>
+                    
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">游戏类型</label>
@@ -132,7 +166,7 @@ app.get('/', (c) => {
                                   class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition"
                                   placeholder="例：在一个被魔法和科技共存的世界，主角需要寻找失落的古代文明遗迹，揭开世界的真相"></textarea>
                     </div>
-                    <div class="flex items-center">
+                    <div class="flex items-center" id="dialoguesOption">
                         <input type="checkbox" id="generateDialogues" checked
                                class="w-5 h-5 text-purple-600 border-gray-300 rounded focus:ring-purple-500">
                         <label class="ml-3 text-sm font-medium text-gray-700">生成示例对话</label>

@@ -217,4 +217,200 @@ export class MasterOrchestrator {
 
     return result.results;
   }
+
+  /**
+   * Generate only worldview (support multiple models)
+   */
+  async generateWorldviewOnly(input: { projectName: string; gameType: string; theme: string; models: string[] }) {
+    const startTime = Date.now();
+    const errors: string[] = [];
+    let totalTokens = 0;
+
+    try {
+      // Create project
+      const projectResult = await this.env.DB.prepare(
+        'INSERT INTO projects (name, game_type, theme, status) VALUES (?, ?, ?, ?)'
+      ).bind(input.projectName, input.gameType, input.theme, 'generating').run();
+
+      const projectId = projectResult.meta.last_row_id as number;
+
+      // Generate worldview with each model
+      const worldviews: any[] = [];
+      for (const modelStr of input.models) {
+        const [provider, model] = this.parseModelString(modelStr);
+        
+        const worldviewAgent = new WorldviewAgent(this.env);
+        const result = await worldviewAgent.generate({
+          projectId,
+          gameType: input.gameType,
+          theme: input.theme,
+        }, provider, model);
+
+        if (result.success) {
+          worldviews.push(result.data);
+          totalTokens += result.tokens || 0;
+        } else {
+          errors.push(`${modelStr}: ${result.error}`);
+        }
+      }
+
+      await this.updateProjectStatus(projectId, worldviews.length > 0 ? 'completed' : 'failed');
+
+      return {
+        success: worldviews.length > 0,
+        projectId,
+        worldviews,
+        errors: errors.length > 0 ? errors : undefined,
+        totalDuration: Date.now() - startTime,
+        totalTokens,
+      };
+    } catch (error: any) {
+      return {
+        success: false,
+        errors: [error.message],
+      };
+    }
+  }
+
+  /**
+   * Generate only characters for existing worldview (support multiple models)
+   */
+  async generateCharactersOnly(input: { projectId: number; worldviewId: number; characterCount: number; models: string[] }) {
+    const startTime = Date.now();
+    const errors: string[] = [];
+    let totalTokens = 0;
+
+    try {
+      const allCharacters: any[] = [];
+
+      for (const modelStr of input.models) {
+        const [provider, model] = this.parseModelString(modelStr);
+        
+        const characterAgent = new CharacterAgent(this.env);
+        const result = await characterAgent.generate({
+          projectId: input.projectId,
+          worldviewId: input.worldviewId,
+          characterCount: input.characterCount,
+        }, provider, model);
+
+        if (result.success) {
+          allCharacters.push(...result.data);
+          totalTokens += result.tokens || 0;
+        } else {
+          errors.push(`${modelStr}: ${result.error}`);
+        }
+      }
+
+      return {
+        success: allCharacters.length > 0,
+        characters: allCharacters,
+        errors: errors.length > 0 ? errors : undefined,
+        totalDuration: Date.now() - startTime,
+        totalTokens,
+      };
+    } catch (error: any) {
+      return {
+        success: false,
+        errors: [error.message],
+      };
+    }
+  }
+
+  /**
+   * Generate dialogue for multiple characters
+   */
+  async generateDialogueForCharacters(input: { projectId: number; characterIds: number[]; sceneName: string; sceneContext: string }) {
+    const startTime = Date.now();
+    const errors: string[] = [];
+    let totalTokens = 0;
+
+    try {
+      const dialogues: any[] = [];
+      const dialogueAgent = new DialogueAgent(this.env);
+
+      for (const characterId of input.characterIds) {
+        const result = await dialogueAgent.generate({
+          projectId: input.projectId,
+          characterId,
+          sceneName: input.sceneName,
+          sceneContext: input.sceneContext,
+        });
+
+        if (result.success) {
+          dialogues.push(result.data);
+          totalTokens += result.tokens || 0;
+        } else {
+          errors.push(`Character ${characterId}: ${result.error}`);
+        }
+      }
+
+      return {
+        success: dialogues.length > 0,
+        dialogues,
+        errors: errors.length > 0 ? errors : undefined,
+        totalDuration: Date.now() - startTime,
+        totalTokens,
+      };
+    } catch (error: any) {
+      return {
+        success: false,
+        errors: [error.message],
+      };
+    }
+  }
+
+  /**
+   * Test multiple models with same prompt
+   */
+  async testModels(input: { prompt: string; systemPrompt: string; models: string[] }) {
+    const startTime = Date.now();
+    const results: any[] = [];
+
+    const { LLMService } = await import('../services/llm');
+    const llm = new LLMService(this.env);
+
+    for (const modelStr of input.models) {
+      const [provider, model] = this.parseModelString(modelStr);
+      
+      try {
+        const response = await llm.call(input.prompt, input.systemPrompt, provider as any, model);
+        results.push({
+          model: modelStr,
+          success: true,
+          content: response.content,
+          tokens: response.tokens,
+          duration: 0, // Will be calculated per model
+        });
+      } catch (error: any) {
+        results.push({
+          model: modelStr,
+          success: false,
+          error: error.message,
+        });
+      }
+    }
+
+    return {
+      success: true,
+      results,
+      totalDuration: Date.now() - startTime,
+    };
+  }
+
+  /**
+   * Parse model string like "openai:gpt-4" or "google:gemini-pro"
+   */
+  private parseModelString(modelStr: string): [string, string | undefined] {
+    if (modelStr.includes(':')) {
+      const [provider, model] = modelStr.split(':');
+      return [provider, model];
+    }
+    // Default models
+    const defaults: any = {
+      'openai': ['openai', 'gpt-4o-mini'],
+      'google': ['google', 'gemini-2.0-flash-exp'],
+      'anthropic': ['anthropic', 'claude-3-5-sonnet-20241022'],
+    };
+    return defaults[modelStr] || ['openai', 'gpt-4o-mini'];
+  }
 }

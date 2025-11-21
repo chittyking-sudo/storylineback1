@@ -12,7 +12,7 @@ export class CharacterAgent {
     this.llm = new LLMService(env);
   }
 
-  async generate(input: AgentInput & { worldviewId: number; characterCount?: number }): Promise<AgentOutput> {
+  async generate(input: AgentInput & { worldviewId: number; characterCount?: number }, provider: any = 'openai', model?: string): Promise<AgentOutput> {
     const startTime = Date.now();
     
     try {
@@ -72,7 +72,7 @@ ${storylineSummary}
 2. 角色群像多样化
 3. 符合世界观设定`;
 
-      const response = await this.llm.call(userPrompt, systemPrompt, 'openai', 'gpt-4o-mini');
+      const response = await this.llm.call(userPrompt, systemPrompt, provider, model || 'gpt-4o-mini');
       
       // Parse JSON from response
       let characters;

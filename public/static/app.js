@@ -20,18 +20,72 @@ async function handleGenerate(e) {
   const theme = document.getElementById('theme').value;
   const characterCount = parseInt(document.getElementById('characterCount').value);
   const generateDialogues = document.getElementById('generateDialogues').checked;
+  const generationMode = document.getElementById('generationMode').value;
+  
+  // Get selected models
+  const selectedModels = Array.from(document.querySelectorAll('input[name="models"]:checked'))
+    .map(cb => cb.value);
+  
+  if (selectedModels.length === 0) {
+    alert('请至少选择一个AI模型');
+    return;
+  }
   
   // Show loading state
   document.getElementById('loadingState').classList.add('active');
   
   try {
-    const response = await axios.post(`${API_BASE}/generate`, {
-      projectName,
-      gameType,
-      theme,
-      characterCount,
-      generateDialogues
-    });
+    let response;
+    
+    if (generationMode === 'worldview') {
+      // Only generate worldview
+      response = await axios.post(`${API_BASE}/generate/worldview`, {
+        projectName,
+        gameType,
+        theme,
+        models: selectedModels
+      });
+    } else if (generationMode === 'worldview-characters') {
+      // Generate worldview first, then characters
+      const worldviewResponse = await axios.post(`${API_BASE}/generate/worldview`, {
+        projectName,
+        gameType,
+        theme,
+        models: selectedModels
+      });
+      
+      if (worldviewResponse.data.success && worldviewResponse.data.worldviews.length > 0) {
+        const firstWorldview = worldviewResponse.data.worldviews[0];
+        const charactersResponse = await axios.post(`${API_BASE}/generate/characters`, {
+          projectId: worldviewResponse.data.projectId,
+          worldviewId: firstWorldview.id,
+          characterCount,
+          models: selectedModels
+        });
+        
+        response = {
+          data: {
+            success: true,
+            projectId: worldviewResponse.data.projectId,
+            worldviews: worldviewResponse.data.worldviews,
+            characters: charactersResponse.data.characters,
+            totalDuration: worldviewResponse.data.totalDuration + charactersResponse.data.totalDuration,
+            totalTokens: worldviewResponse.data.totalTokens + charactersResponse.data.totalTokens
+          }
+        };
+      } else {
+        throw new Error('世界观生成失败');
+      }
+    } else {
+      // Full generation
+      response = await axios.post(`${API_BASE}/generate`, {
+        projectName,
+        gameType,
+        theme,
+        characterCount,
+        generateDialogues
+      });
+    }
     
     // Hide loading state
     document.getElementById('loadingState').classList.remove('active');
@@ -147,9 +201,19 @@ async function viewProject(projectId) {
       const wv = data.worldviews[0];
       content += `
         <div class="mb-8">
-          <h3 class="text-2xl font-bold text-purple-600 mb-4">
-            <i class="fas fa-globe mr-2"></i>世界观
-          </h3>
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-2xl font-bold text-purple-600">
+              <i class="fas fa-globe mr-2"></i>世界观
+            </h3>
+            <div class="space-x-2">
+              <button onclick="generateCharactersForWorldview(${projectId}, ${wv.id})" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
+                <i class="fas fa-users mr-1"></i>生成角色
+              </button>
+              <button onclick="generateDialogueForWorldview(${projectId}, ${wv.id})" class="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600">
+                <i class="fas fa-comments mr-1"></i>生成对话
+              </button>
+            </div>
+          </div>
           <div class="bg-purple-50 rounded-lg p-6 space-y-4">
             <h4 class="text-xl font-semibold">${escapeHtml(wv.title)}</h4>
             ${wv.history ? `<div><strong class="text-purple-700">历史:</strong><p class="mt-1">${escapeHtml(wv.history)}</p></div>` : ''}
@@ -182,11 +246,22 @@ async function viewProject(projectId) {
     
     // Characters
     if (data.characters.length > 0) {
+      const characterIds = data.characters.map(c => c.id).join(',');
       content += `
         <div class="mb-8">
-          <h3 class="text-2xl font-bold text-green-600 mb-4">
-            <i class="fas fa-users mr-2"></i>角色 (${data.characters.length})
-          </h3>
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-2xl font-bold text-green-600">
+              <i class="fas fa-users mr-2"></i>角色 (${data.characters.length})
+            </h3>
+            <div class="space-x-2">
+              <button onclick="generateDialogueForCharacters(${projectId}, [${characterIds}])" class="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600">
+                <i class="fas fa-comments mr-1"></i>生成对话
+              </button>
+              <button onclick="testModelsWithCharacters(${projectId}, [${characterIds}])" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+                <i class="fas fa-flask mr-1"></i>模型测试
+              </button>
+            </div>
+          </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             ${data.characters.map(char => `
               <div class="bg-green-50 rounded-lg p-4">
@@ -312,5 +387,207 @@ function formatDialogues(content) {
     `).join('');
   } catch (e) {
     return `<p class="text-gray-800">${escapeHtml(content)}</p>`;
+  }
+}
+
+/**
+ * Generate characters for a worldview
+ */
+async function generateCharactersForWorldview(projectId, worldviewId) {
+  const characterCount = prompt('请输入要生成的角色数量:', '5');
+  if (!characterCount) return;
+  
+  const selectedModels = ['openai']; // Default model
+  
+  const loadingDiv = document.createElement('div');
+  loadingDiv.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+  loadingDiv.innerHTML = `
+    <div class="bg-white rounded-xl p-8">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
+      <p class="text-center text-gray-800">正在生成角色...</p>
+    </div>
+  `;
+  document.body.appendChild(loadingDiv);
+  
+  try {
+    const response = await axios.post(`${API_BASE}/generate/characters`, {
+      projectId,
+      worldviewId,
+      characterCount: parseInt(characterCount),
+      models: selectedModels
+    });
+    
+    loadingDiv.remove();
+    
+    if (response.data.success) {
+      alert(`✅ 成功生成 ${response.data.characters.length} 个角色！`);
+      // Reload project view
+      document.querySelector('.fixed').remove();
+      viewProject(projectId);
+    } else {
+      alert('⚠️ 生成失败:\n' + (response.data.errors || []).join('\n'));
+    }
+  } catch (error) {
+    loadingDiv.remove();
+    alert('❌ 生成失败: ' + error.message);
+  }
+}
+
+/**
+ * Generate dialogue for worldview (use first character if available)
+ */
+async function generateDialogueForWorldview(projectId, worldviewId) {
+  // Get characters for this project
+  const projectData = await axios.get(`${API_BASE}/projects/${projectId}`);
+  const characters = projectData.data.characters;
+  
+  if (characters.length === 0) {
+    alert('请先生成角色');
+    return;
+  }
+  
+  const characterIds = characters.map(c => c.id);
+  await generateDialogueForCharacters(projectId, characterIds);
+}
+
+/**
+ * Generate dialogue for specific characters
+ */
+async function generateDialogueForCharacters(projectId, characterIds) {
+  const sceneName = prompt('请输入场景名称:', '默认场景');
+  if (!sceneName) return;
+  
+  const sceneContext = prompt('请输入场景情境:', '角色之间的日常对话');
+  if (!sceneContext) return;
+  
+  const loadingDiv = document.createElement('div');
+  loadingDiv.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+  loadingDiv.innerHTML = `
+    <div class="bg-white rounded-xl p-8">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto mb-4"></div>
+      <p class="text-center text-gray-800">正在生成对话...</p>
+    </div>
+  `;
+  document.body.appendChild(loadingDiv);
+  
+  try {
+    const response = await axios.post(`${API_BASE}/generate/dialogue`, {
+      projectId,
+      characterIds,
+      sceneName,
+      sceneContext
+    });
+    
+    loadingDiv.remove();
+    
+    if (response.data.success) {
+      alert(`✅ 成功生成 ${response.data.dialogues.length} 段对话！`);
+      // Reload project view
+      document.querySelector('.fixed').remove();
+      viewProject(projectId);
+    } else {
+      alert('⚠️ 生成失败:\n' + (response.data.errors || []).join('\n'));
+    }
+  } catch (error) {
+    loadingDiv.remove();
+    alert('❌ 生成失败: ' + error.message);
+  }
+}
+
+/**
+ * Test multiple models with same prompt
+ */
+async function testModelsWithCharacters(projectId, characterIds) {
+  // Get first character for context
+  const charResponse = await axios.get(`${API_BASE}/characters/${characterIds[0]}`);
+  const character = charResponse.data;
+  
+  const testPrompt = prompt('请输入测试对话内容:', '你好，最近怎么样？');
+  if (!testPrompt) return;
+  
+  const systemPrompt = `你是游戏角色"${character.name}"，性格：${character.personality || '未知'}。请用该角色的口吻回答。`;
+  
+  const models = ['openai', 'google', 'openai:gpt-4o'];
+  
+  const loadingDiv = document.createElement('div');
+  loadingDiv.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+  loadingDiv.innerHTML = `
+    <div class="bg-white rounded-xl p-8">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+      <p class="text-center text-gray-800">正在测试多个模型...</p>
+    </div>
+  `;
+  document.body.appendChild(loadingDiv);
+  
+  try {
+    const response = await axios.post(`${API_BASE}/test/models`, {
+      prompt: testPrompt,
+      systemPrompt,
+      models
+    });
+    
+    loadingDiv.remove();
+    
+    // Show results in modal
+    const modal = document.createElement('div');
+    modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';
+    modal.onclick = (e) => {
+      if (e.target === modal) modal.remove();
+    };
+    
+    let resultsHtml = `
+      <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto p-8">
+        <div class="flex justify-between items-start mb-6">
+          <h2 class="text-2xl font-bold text-gray-800">模型对比测试结果</h2>
+          <button onclick="this.closest('.fixed').remove()" class="text-gray-500 hover:text-gray-700">
+            <i class="fas fa-times text-2xl"></i>
+          </button>
+        </div>
+        
+        <div class="mb-4 p-4 bg-gray-50 rounded-lg">
+          <p><strong>角色:</strong> ${escapeHtml(character.name)}</p>
+          <p><strong>测试问题:</strong> ${escapeHtml(testPrompt)}</p>
+        </div>
+        
+        <div class="space-y-4">
+    `;
+    
+    response.data.results.forEach(result => {
+      if (result.success) {
+        resultsHtml += `
+          <div class="border-2 border-gray-200 rounded-lg p-4">
+            <div class="flex justify-between items-center mb-2">
+              <h3 class="font-bold text-lg">${result.model}</h3>
+              <span class="text-xs text-gray-500">${result.tokens || '?'} tokens</span>
+            </div>
+            <p class="text-gray-700">${escapeHtml(result.content)}</p>
+          </div>
+        `;
+      } else {
+        resultsHtml += `
+          <div class="border-2 border-red-200 rounded-lg p-4 bg-red-50">
+            <h3 class="font-bold text-lg text-red-700">${result.model}</h3>
+            <p class="text-red-600">错误: ${escapeHtml(result.error)}</p>
+          </div>
+        `;
+      }
+    });
+    
+    resultsHtml += `
+        </div>
+        <div class="mt-6 text-center">
+          <button onclick="this.closest('.fixed').remove()" class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600">
+            关闭
+          </button>
+        </div>
+      </div>
+    `;
+    
+    modal.innerHTML = resultsHtml;
+    document.body.appendChild(modal);
+    
+  } catch (error) {
+    loadingDiv.remove();
+    alert('❌ 测试失败: ' + error.message);
   }
 }
