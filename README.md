@@ -80,8 +80,7 @@ Master Orchestrator
 - **运行时**: Cloudflare Workers
 - **数据库**: Cloudflare D1 (SQLite)
 - **AI 模型**:
-  - OpenAI GPT-4o-mini (世界观、剧情、对话)
-  - Anthropic Claude-3-Sonnet (角色创建)
+  - OpenAI GPT-4o-mini (世界观、剧情、角色、对话)
   - Google Gemini (备用)
 - **前端**: HTML + TailwindCSS + Vanilla JS
 
