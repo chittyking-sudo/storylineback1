@@ -12,7 +12,7 @@
 
 - **生产环境**: https://3000-imt0hr8ioseb4qc1ytnn4-2b54fc91.sandbox.novita.ai
 - **API 健康检查**: https://3000-imt0hr8ioseb4qc1ytnn4-2b54fc91.sandbox.novita.ai/api/health
-- **GitHub**: (待配置)
+- **GitHub 仓库**: https://github.com/chittyking-sudo/storylineback1
 
 ## ✨ 核心功能
 
