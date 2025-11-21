@@ -16,14 +16,45 @@ export class WorldviewAgent {
     const startTime = Date.now();
     
     try {
-      const systemPrompt = `你是一位资深游戏世界观设计师，擅长构建完整、有深度的游戏世界。
-你的任务是根据游戏类型和主题，创建一个引人入胜的世界观框架。
+      // Adjust system prompt based on game type
+      let roleDescription = '资深游戏世界观设计师';
+      let additionalRequirements = '';
+      
+      if (input.gameType.includes('电影剧本')) {
+        roleDescription = '资深电影编剧和世界观设计师';
+        additionalRequirements = `
+特别注意：
+- 这是电影剧本的世界观，注重戏剧性和视觉表现力
+- 场景设定要便于拍摄和呈现
+- 人物关系要有冲突和张力
+- 背景要服务于故事叙事`;
+      } else if (input.gameType.includes('游戏世界-魔幻')) {
+        roleDescription = '资深魔幻游戏世界观设计师';
+        additionalRequirements = `
+特别注意：
+- 构建完整的魔法体系和规则
+- 设计丰富的种族和职业系统
+- 创造史诗级的冒险背景
+- 包含神秘的宝物和传说`;
+      } else if (input.gameType.includes('游戏世界-乙游')) {
+        roleDescription = '资深乙女游戏世界观设计师';
+        additionalRequirements = `
+特别注意：
+- 创造浪漫和梦幻的世界氛围
+- 设定适合角色邂逅的场景
+- 构建有层次的社交体系
+- 融入情感发展的契机`;
+      }
+
+      const systemPrompt = `你是一位${roleDescription}，擅长构建完整、有深度的世界。
+你的任务是根据类型和主题，创建一个引人入胜的世界观框架。
 
 要求：
 1. 历史：构建世界的历史背景，包括重大事件、时代变迁
 2. 地理：描述世界的地理环境、重要地点、气候特征
 3. 文化：阐述世界的文化体系、信仰、社会结构
 4. 传说：创造世界中的神话、传说、重要故事
+${additionalRequirements}
 
 输出格式为 JSON：
 {

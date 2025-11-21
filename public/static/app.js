@@ -7,7 +7,118 @@ document.addEventListener('DOMContentLoaded', () => {
   loadProjects();
   
   document.getElementById('generateForm').addEventListener('submit', handleGenerate);
+  
+  // Initialize worldview style change handler
+  const worldviewStyleSelect = document.getElementById('worldviewStyle');
+  if (worldviewStyleSelect) {
+    worldviewStyleSelect.addEventListener('change', updateGameTypeOptions);
+  }
 });
+
+/**
+ * Update game type options based on worldview style
+ */
+function updateGameTypeOptions() {
+  const worldviewStyle = document.getElementById('worldviewStyle').value;
+  const gameTypeSelect = document.getElementById('gameType');
+  const gameTypeLabel = document.getElementById('gameTypeLabel');
+  
+  // Clear existing options
+  gameTypeSelect.innerHTML = '';
+  
+  const optionGroups = {
+    '电影剧本-喜剧': {
+      label: '喜剧细分',
+      options: [
+        { value: '浪漫喜剧', label: '浪漫喜剧' },
+        { value: '荒诞喜剧', label: '荒诞喜剧' },
+        { value: '黑色幽默', label: '黑色幽默' },
+        { value: '情景喜剧', label: '情景喜剧' },
+        { value: '闹剧', label: '闹剧' }
+      ]
+    },
+    '电影剧本-解谜': {
+      label: '解谜细分',
+      options: [
+        { value: '推理解谜', label: '推理解谜' },
+        { value: '密室逃脱', label: '密室逃脱' },
+        { value: '宝藏寻找', label: '宝藏寻找' },
+        { value: '真相调查', label: '真相调查' },
+        { value: '谜题冒险', label: '谜题冒险' }
+      ]
+    },
+    '电影剧本-悬疑': {
+      label: '悬疑细分',
+      options: [
+        { value: '犯罪悬疑', label: '犯罪悬疑' },
+        { value: '心理悬疑', label: '心理悬疑' },
+        { value: '惊悚悬疑', label: '惊悚悬疑' },
+        { value: '侦探悬疑', label: '侦探悬疑' },
+        { value: '超自然悬疑', label: '超自然悬疑' }
+      ]
+    },
+    '电影剧本-言情': {
+      label: '言情细分',
+      options: [
+        { value: '都市言情', label: '都市言情' },
+        { value: '古装言情', label: '古装言情' },
+        { value: '奇幻言情', label: '奇幻言情' },
+        { value: '虐恋情深', label: '虐恋情深' },
+        { value: '甜宠轻松', label: '甜宠轻松' }
+      ]
+    },
+    '游戏世界-魔幻游戏': {
+      label: '魔幻游戏类型',
+      options: [
+        { value: 'RPG角色扮演', label: 'RPG角色扮演' },
+        { value: '开放世界', label: '开放世界' },
+        { value: 'MMORPG', label: 'MMORPG' },
+        { value: '回合制策略', label: '回合制策略' },
+        { value: '动作冒险', label: '动作冒险' }
+      ]
+    },
+    '游戏世界-乙游': {
+      label: '乙游类型',
+      options: [
+        { value: '现代都市', label: '现代都市' },
+        { value: '古风仙侠', label: '古风仙侠' },
+        { value: '校园青春', label: '校园青春' },
+        { value: '奇幻冒险', label: '奇幻冒险' },
+        { value: '民国复古', label: '民国复古' }
+      ]
+    },
+    '自定义': {
+      label: '自定义类型',
+      options: [
+        { value: '自定义', label: '完全自定义（在主题描述中详细说明）' }
+      ]
+    }
+  };
+  
+  if (worldviewStyle && optionGroups[worldviewStyle]) {
+    const group = optionGroups[worldviewStyle];
+    gameTypeLabel.textContent = group.label;
+    
+    // Add options
+    const defaultOption = document.createElement('option');
+    defaultOption.value = '';
+    defaultOption.textContent = `选择${group.label}`;
+    gameTypeSelect.appendChild(defaultOption);
+    
+    group.options.forEach(opt => {
+      const option = document.createElement('option');
+      option.value = opt.value;
+      option.textContent = opt.label;
+      gameTypeSelect.appendChild(option);
+    });
+  } else {
+    gameTypeLabel.textContent = '类型细分';
+    const defaultOption = document.createElement('option');
+    defaultOption.value = '';
+    defaultOption.textContent = '请先选择世界观风格';
+    gameTypeSelect.appendChild(defaultOption);
+  }
+}
 
 /**
  * Handle form submission to generate new project
@@ -16,11 +127,15 @@ async function handleGenerate(e) {
   e.preventDefault();
   
   const projectName = document.getElementById('projectName').value;
+  const worldviewStyle = document.getElementById('worldviewStyle').value;
   const gameType = document.getElementById('gameType').value;
   const theme = document.getElementById('theme').value;
   const characterCount = parseInt(document.getElementById('characterCount').value);
   const generateDialogues = document.getElementById('generateDialogues').checked;
   const generationMode = document.getElementById('generationMode').value;
+  
+  // Combine worldview style and game type
+  const fullGameType = worldviewStyle && gameType ? `${worldviewStyle}-${gameType}` : gameType;
   
   // Get selected models
   const selectedModels = Array.from(document.querySelectorAll('input[name="models"]:checked'))
@@ -41,7 +156,7 @@ async function handleGenerate(e) {
       // Only generate worldview
       response = await axios.post(`${API_BASE}/generate/worldview`, {
         projectName,
-        gameType,
+        gameType: fullGameType,
         theme,
         models: selectedModels
       });
@@ -49,7 +164,7 @@ async function handleGenerate(e) {
       // Generate worldview first, then characters
       const worldviewResponse = await axios.post(`${API_BASE}/generate/worldview`, {
         projectName,
-        gameType,
+        gameType: fullGameType,
         theme,
         models: selectedModels
       });
@@ -80,7 +195,7 @@ async function handleGenerate(e) {
       // Full generation
       response = await axios.post(`${API_BASE}/generate`, {
         projectName,
-        gameType,
+        gameType: fullGameType,
         theme,
         characterCount,
         generateDialogues

@@ -140,18 +140,35 @@ app.get('/', (c) => {
                         </div>
                     </div>
                     
+                    <!-- Worldview Style Selection -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">世界观风格</label>
+                        <select id="worldviewStyle" required
+                                class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition"
+                                onchange="updateGameTypeOptions()">
+                            <option value="">选择世界观风格</option>
+                            <optgroup label="电影剧本">
+                                <option value="电影剧本-喜剧">喜剧</option>
+                                <option value="电影剧本-解谜">解谜</option>
+                                <option value="电影剧本-悬疑">悬疑</option>
+                                <option value="电影剧本-言情">言情</option>
+                            </optgroup>
+                            <optgroup label="游戏世界">
+                                <option value="游戏世界-魔幻游戏">魔幻游戏</option>
+                                <option value="游戏世界-乙游">乙女游戏</option>
+                            </optgroup>
+                            <option value="自定义">自定义（完全自己设定）</option>
+                        </select>
+                    </div>
+                    
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">游戏类型</label>
+                        <div id="gameTypeContainer">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                <span id="gameTypeLabel">类型细分</span>
+                            </label>
                             <select id="gameType" required
                                     class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition">
-                                <option value="">选择类型</option>
-                                <option value="RPG">角色扮演 (RPG)</option>
-                                <option value="冒险">冒险游戏</option>
-                                <option value="策略">策略游戏</option>
-                                <option value="模拟">模拟经营</option>
-                                <option value="解谜">解谜游戏</option>
-                                <option value="动作">动作游戏</option>
+                                <option value="">请先选择世界观风格</option>
                             </select>
                         </div>
                         <div>
