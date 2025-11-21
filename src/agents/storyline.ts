@@ -69,15 +69,15 @@ export class StorylineAgent {
         };
       }
 
-      // Save to database
+      // Save to database (ensure all fields are strings)
       const storyline: Storyline = {
         project_id: input.projectId,
         worldview_id: input.worldviewId,
         type: 'main',
         title: parsedData.title || '主线剧情',
-        summary: parsedData.summary,
-        acts: parsedData.acts,
-        conflicts: parsedData.conflicts,
+        summary: typeof parsedData.summary === 'string' ? parsedData.summary : JSON.stringify(parsedData.summary || ''),
+        acts: typeof parsedData.acts === 'string' ? parsedData.acts : JSON.stringify(parsedData.acts || ''),
+        conflicts: typeof parsedData.conflicts === 'string' ? parsedData.conflicts : JSON.stringify(parsedData.conflicts || ''),
         raw_content: response.content,
         model_used: response.model,
       };

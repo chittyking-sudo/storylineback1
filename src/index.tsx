@@ -82,7 +82,7 @@ app.get('/', (c) => {
                         <i class="fas fa-users text-4xl mb-3"></i>
                         <h3 class="text-xl font-bold mb-2">角色创建 Agent</h3>
                         <p class="text-sm opacity-90">生成立体角色、性格背景和关系网</p>
-                        <div class="mt-3 text-xs opacity-75">Model: Claude-3</div>
+                        <div class="mt-3 text-xs opacity-75">Model: GPT-4</div>
                     </div>
                     <div class="agent-card bg-gradient-to-br from-orange-500 to-orange-600 text-white p-6 rounded-xl">
                         <i class="fas fa-comments text-4xl mb-3"></i>

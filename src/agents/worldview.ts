@@ -58,14 +58,14 @@ export class WorldviewAgent {
         };
       }
 
-      // Save to database
+      // Save to database (ensure all fields are strings or null)
       const worldview: Worldview = {
         project_id: input.projectId,
         title: parsedData.title || `${input.theme} 世界观`,
-        history: parsedData.history,
-        geography: parsedData.geography,
-        culture: parsedData.culture,
-        lore: parsedData.lore,
+        history: parsedData.history ? (typeof parsedData.history === 'string' ? parsedData.history : JSON.stringify(parsedData.history)) : null,
+        geography: parsedData.geography ? (typeof parsedData.geography === 'string' ? parsedData.geography : JSON.stringify(parsedData.geography)) : null,
+        culture: parsedData.culture ? (typeof parsedData.culture === 'string' ? parsedData.culture : JSON.stringify(parsedData.culture)) : null,
+        lore: parsedData.lore ? (typeof parsedData.lore === 'string' ? parsedData.lore : JSON.stringify(parsedData.lore)) : null,
         raw_content: response.content,
         model_used: response.model,
       };

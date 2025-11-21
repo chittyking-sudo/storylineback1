@@ -72,7 +72,7 @@ ${storylineSummary}
 2. 角色群像多样化
 3. 符合世界观设定`;
 
-      const response = await this.llm.call(userPrompt, systemPrompt, 'anthropic', 'claude-3-5-sonnet-20241022');
+      const response = await this.llm.call(userPrompt, systemPrompt, 'openai', 'gpt-4o-mini');
       
       // Parse JSON from response
       let characters;
