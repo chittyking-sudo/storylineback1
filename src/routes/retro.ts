@@ -11,13 +11,13 @@ const retroHTML = `<!DOCTYPE html>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-beige: #fdf5e6;
-            --retro-pink: #ff85c2;
-            --retro-green: #45c4a0;
+            --bg-beige: #f0d7b7;
+            --retro-pink: #e66285;
+            --retro-green: #2c9560;
             --retro-blue: #5c7cfa;
             --retro-dark-blue: #415bc4;
-            --border-color: #000000;
-            --shadow: 4px 4px 0px #000000;
+            --border-color: #000100;
+            --shadow: 4px 4px 0px #000100;
             --font-main: 'Arial Black', 'Impact', sans-serif;
             --font-ui: 'Verdana', sans-serif;
         }

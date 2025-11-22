@@ -21,11 +21,11 @@ retroGames.get('/projects', async (c) => {
           <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
           <style>
               :root {
-                  --bg-beige: #fdf5e6;
-                  --retro-pink: #ff85c2;
-                  --retro-green: #45c4a0;
+                  --bg-beige: #f0d7b7;
+                  --retro-pink: #e66285;
+                  --retro-green: #2c9560;
                   --retro-blue: #5c7cfa;
-                  --border-color: #000000;
+                  --border-color: #000100;
               }
               body {
                   margin: 0;
@@ -216,11 +216,11 @@ retroGames.get('/project/:id', async (c) => {
           <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
           <style>
               :root {
-                  --bg-beige: #fdf5e6;
-                  --retro-pink: #ff85c2;
-                  --retro-green: #45c4a0;
+                  --bg-beige: #f0d7b7;
+                  --retro-pink: #e66285;
+                  --retro-green: #2c9560;
                   --retro-blue: #5c7cfa;
-                  --border-color: #000000;
+                  --border-color: #000100;
               }
               body {
                   margin: 0;
