@@ -350,28 +350,28 @@ const retroHTML = `<!DOCTYPE html>
             <div class="sidebar">
                 
                 <div class="sidebar-btn btn-green">
-                    <i class="fa-solid fa-house"></i> Home
+                    <i class="fa-solid fa-house"></i> 主页
                 </div>
                 <div class="sidebar-btn btn-green">
-                    <i class="fa-solid fa-compass"></i> Explore
+                    <i class="fa-solid fa-compass"></i> 探索
                 </div>
                 <div class="sidebar-btn btn-green">
-                    <i class="fa-solid fa-compact-disc"></i> Discover
+                    <i class="fa-solid fa-compact-disc"></i> 发现
                 </div>
                 <div class="sidebar-btn btn-green">
-                    <i class="fa-solid fa-brain"></i> Remember
+                    <i class="fa-solid fa-brain"></i> 回忆
                 </div>
 
                 <div class="spacer"></div>
 
                 <div class="sidebar-btn btn-pink">
-                    <i class="fa-solid fa-book"></i> My Library
+                    <i class="fa-solid fa-book"></i> 我的收藏
                 </div>
                 <div class="sidebar-btn btn-green">
-                    <i class="fa-solid fa-border-all"></i> Create Playlist
+                    <i class="fa-solid fa-border-all"></i> 创建列表
                 </div>
                 <div class="sidebar-btn btn-green">
-                    <i class="fa-solid fa-heart"></i> Liked Songs
+                    <i class="fa-solid fa-heart"></i> 喜欢内容
                 </div>
 
                 <div class="footer-socials">
@@ -389,10 +389,10 @@ const retroHTML = `<!DOCTYPE html>
             <div class="content">
                 
                 <div class="hero">
-                    <h1 class="hero-title">WELCOME TO</h1>
-                    <h1 class="hero-title green">RETRO WEB</h1>
+                    <h1 class="hero-title">欢迎来到</h1>
+                    <h1 class="hero-title green">复古网络</h1>
                     <div class="hero-subtitle-box">
-                        Experience the nostalgic charm of vintage computing
+                        体验怀旧的复古计算机魅力 - 90年代风格重现
                     </div>
                 </div>
 
@@ -400,47 +400,258 @@ const retroHTML = `<!DOCTYPE html>
                     
                     <div class="card">
                         <div class="card-header">
-                            Explore
+                            探索世界
                             <div class="win-icons"><div class="win-icon-box"></div><div class="win-icon-box"></div></div>
                         </div>
                         <div class="card-body">
                             <div class="illustration-placeholder">
                                 <i class="fa-solid fa-computer"></i>
                             </div>
+                            <p style="padding: 10px; text-align: center; font-weight: bold;">探索早期互联网的隐藏宝藏和经典内容</p>
                             </div>
-                        <div class="card-btn-lg">EXPLORE</div>
+                        <div class="card-btn-lg">开始探索</div>
                     </div>
 
                     <div class="card">
                         <div class="card-header green">
-                            Discover
+                            发现精彩
                             <div class="win-icons"><div class="win-icon-box"></div><div class="win-icon-box"></div></div>
                         </div>
                         <div class="card-body">
                              <div class="illustration-placeholder">
                                 <i class="fa-regular fa-floppy-disk"></i>
                             </div>
+                            <p style="padding: 10px; text-align: center; font-weight: bold;">发掘计算机黄金时代的精彩故事</p>
                         </div>
-                        <div class="card-btn-lg">DISCOVER</div>
+                        <div class="card-btn-lg">立即发现</div>
                     </div>
 
                     <div class="card">
                         <div class="card-header">
-                            Remember
+                            回忆往昔
                             <div class="win-icons"><div class="win-icon-box"></div><div class="win-icon-box"></div></div>
                         </div>
                         <div class="card-body">
                              <div class="illustration-placeholder">
                                 <i class="fa-solid fa-window-restore"></i>
                             </div>
+                            <p style="padding: 10px; text-align: center; font-weight: bold;">重温拨号上网和软盘时代的美好回忆</p>
                         </div>
-                        <div class="card-btn-lg">REMEMBER</div>
+                        <div class="card-btn-lg">回忆过去</div>
                     </div>
 
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        // Current page state
+        let currentPage = 'home';
+        
+        // Page content definitions
+        const pages = {
+            home: {
+                title: '欢迎来到',
+                subtitle: '复古网络',
+                description: '体验怀旧的复古计算机魅力 - 90年代风格重现'
+            },
+            explore: {
+                title: '探索',
+                subtitle: '数字世界',
+                description: '发现早期互联网时代的隐藏宝藏'
+            },
+            discover: {
+                title: '发现新的',
+                subtitle: '冒险旅程',
+                description: '揭开计算机黄金时代的精彩故事'
+            },
+            remember: {
+                title: '回忆',
+                subtitle: '美好时光',
+                description: '重温拨号上网和软盘时代的美好回忆'
+            },
+            library: {
+                title: '你的个人',
+                subtitle: '资料库',
+                description: '访问你保存的内容和收藏集'
+            },
+            games: {
+                title: '游戏内容',
+                subtitle: '生成器',
+                description: '使用 AI 智能体创造精彩的游戏世界'
+            }
+        };
+
+        // Navigation function
+        function navigateTo(page) {
+            currentPage = page;
+            updateAddressBar(page);
+            updateHeroSection(page);
+            animatePageTransition();
+        }
+
+        // Update address bar
+        function updateAddressBar(page) {
+            const addressBar = document.querySelector('.address-bar');
+            addressBar.style.opacity = '0';
+            setTimeout(() => {
+                addressBar.textContent = \`http://www.retroweb.net/\${page}\`;
+                addressBar.style.opacity = '1';
+            }, 150);
+        }
+
+        // Update hero section
+        function updateHeroSection(page) {
+            const pageData = pages[page] || pages.home;
+            const hero = document.querySelector('.hero');
+            const titles = hero.querySelectorAll('.hero-title');
+            const subtitle = hero.querySelector('.hero-subtitle-box');
+            
+            hero.style.opacity = '0';
+            setTimeout(() => {
+                titles[0].textContent = pageData.title;
+                titles[1].textContent = pageData.subtitle;
+                subtitle.textContent = pageData.description;
+                hero.style.opacity = '1';
+            }, 200);
+        }
+
+        // Animate page transition
+        function animatePageTransition() {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                card.style.transform = 'translateY(20px)';
+                card.style.opacity = '0';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.3s ease';
+                    card.style.transform = 'translateY(0)';
+                    card.style.opacity = '1';
+                }, 100 * index);
+            });
+        }
+
+        // Button click effects
+        function setupButtonEffects() {
+            // Sidebar buttons
+            const sidebarBtns = document.querySelectorAll('.sidebar-btn');
+            sidebarBtns.forEach((btn, index) => {
+                btn.addEventListener('click', () => {
+                    const pages = ['home', 'explore', 'discover', 'remember', 'library', 'playlist', 'liked'];
+                    if (index === 4) navigateTo('library');
+                    else if (index < 4) navigateTo(pages[index]);
+                    
+                    // Visual feedback
+                    btn.style.background = '#ffd700';
+                    setTimeout(() => {
+                        btn.classList.contains('btn-green') 
+                            ? btn.style.background = '#45c4a0'
+                            : btn.style.background = '#ff85c2';
+                    }, 200);
+                });
+            });
+
+            // Card buttons
+            const cardBtns = document.querySelectorAll('.card-btn-lg');
+            cardBtns.forEach((btn, index) => {
+                btn.addEventListener('click', () => {
+                    const pages = ['explore', 'discover', 'remember'];
+                    navigateTo(pages[index]);
+                });
+            });
+
+            // Cards themselves
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.style.transform = 'scale(1.05)';
+                    card.style.transition = 'transform 0.2s ease';
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'scale(1)';
+                });
+            });
+
+            // Browser navigation buttons
+            document.querySelectorAll('.nav-controls i').forEach((icon, index) => {
+                icon.addEventListener('click', () => {
+                    if (index === 0) history.back();
+                    else if (index === 1) history.forward();
+                    else if (index === 2) location.reload();
+                    
+                    icon.style.color = '#ff85c2';
+                    setTimeout(() => icon.style.color = '#555', 200);
+                });
+            });
+        }
+
+        // Social icons animation
+        function setupSocialIcons() {
+            const socialIcons = document.querySelectorAll('.social-icon');
+            socialIcons.forEach(icon => {
+                icon.addEventListener('click', () => {
+                    icon.style.transform = 'rotate(360deg) scale(1.2)';
+                    icon.style.transition = 'transform 0.5s ease';
+                    setTimeout(() => {
+                        icon.style.transform = 'rotate(0deg) scale(1)';
+                    }, 500);
+                });
+            });
+        }
+
+        // Add "Game Generator" link
+        function addGameGeneratorLink() {
+            const sidebar = document.querySelector('.sidebar');
+            const spacer = document.createElement('div');
+            spacer.className = 'spacer';
+            sidebar.insertBefore(spacer, sidebar.querySelector('.footer-socials'));
+            
+            const gameGenBtn = document.createElement('div');
+            gameGenBtn.className = 'sidebar-btn btn-pink';
+            gameGenBtn.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles"></i> 游戏生成器';
+            gameGenBtn.style.animation = 'pulse 2s infinite';
+            gameGenBtn.addEventListener('click', () => {
+                navigateTo('games');
+                setTimeout(() => {
+                    window.open('/', '_blank');
+                }, 500);
+            });
+            sidebar.insertBefore(gameGenBtn, sidebar.querySelector('.footer-socials'));
+            
+            // Add "View Projects" button
+            const viewProjectsBtn = document.createElement('div');
+            viewProjectsBtn.className = 'sidebar-btn btn-green';
+            viewProjectsBtn.innerHTML = '<i class="fa-solid fa-folder-open"></i> 查看项目';
+            viewProjectsBtn.addEventListener('click', () => {
+                window.location.href = '/retro/games/projects';
+            });
+            sidebar.insertBefore(viewProjectsBtn, sidebar.querySelector('.footer-socials'));
+        }
+
+        // Add pulse animation
+        const style = document.createElement('style');
+        style.textContent = \`
+            @keyframes pulse {
+                0%, 100% { opacity: 1; }
+                50% { opacity: 0.7; }
+            }
+            .address-bar {
+                transition: opacity 0.3s ease;
+            }
+            .hero {
+                transition: opacity 0.4s ease;
+            }
+        \`;
+        document.head.appendChild(style);
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            setupButtonEffects();
+            setupSocialIcons();
+            addGameGeneratorLink();
+            console.log('🎮 Retro Web Explorer v2025 - Ready!');
+        });
+    </script>
 
 </body>
 </html>`;
