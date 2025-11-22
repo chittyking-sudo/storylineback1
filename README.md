@@ -10,9 +10,8 @@
 
 ## 🌐 在线访问
 
+- **🏠 v2.2 经典版（默认）**: https://3000-imt0hr8ioseb4qc1ytnn4-2b54fc91.sandbox.novita.ai
 - **🆕 v3.0 复古科技版**: https://3000-imt0hr8ioseb4qc1ytnn4-2b54fc91.sandbox.novita.ai/vintage
-- **主应用（v2.3 统一界面）**: https://3000-imt0hr8ioseb4qc1ytnn4-2b54fc91.sandbox.novita.ai
-- **复古网页（v2.2 经典版）**: https://3000-imt0hr8ioseb4qc1ytnn4-2b54fc91.sandbox.novita.ai/retro
 - **游戏项目详情**: https://3000-imt0hr8ioseb4qc1ytnn4-2b54fc91.sandbox.novita.ai/retro/games/projects
 - **API 健康检查**: https://3000-imt0hr8ioseb4qc1ytnn4-2b54fc91.sandbox.novita.ai/api/health
 - **GitHub 仓库**: https://github.com/chittyking-sudo/storylineback1
@@ -362,11 +361,27 @@ ISC License
 
 **最后更新**: 2024-11-22
 **项目状态**: ✅ 运行中
-**版本**: 3.0.0
+**当前版本**: v2.2 (默认) + v3.0 (可选)
+
+## 🔄 最新更新 (2024-11-22)
+
+**重大架构调整**:
+- ❌ **移除 v2.3** - 删除统一界面版本，简化版本管理
+- ✅ **v2.2 成为默认版本** - 经典复古风格作为主要入口
+- ✅ **完善 v2.2 创建功能** - 添加完整的项目创建表单
+- ✅ **统一 v2.2 和 v3.0 表单逻辑** - 两个版本使用相同的表单选项
+
+**v2.2 新增功能**:
+- ✨ 完整的创建项目表单（10种游戏类型，8种内容类型）
+- ✨ 游戏类型：RPG、冒险、动作、策略、模拟、恐怖、科幻、奇幻、悬疑、恋爱
+- ✨ 内容类型：世界观、剧情、任务、角色、对话、道具、场景、完整内容
+- ✨ 表单验证和友好提示
+- ✨ 1200x800 浏览器窗口尺寸
+- ✨ 保持原有配色和字体（Pixeloid Sans + FZG CN）
 
 ## 🆕 v3.0 更新内容
 
-**Vintage Tech OS 复古科技版** (v3.0 - 最新):
+**Vintage Tech OS 复古科技版** (v3.0):
 - ✅ **全新 Mac OS 经典风格** - 灵感来自 90 年代 Mac 操作系统
 - ✅ **抽象几何背景** - 奶油色 + 浅蓝色的现代复古融合
 - ✅ **窗口化界面** - 经典的窗口控制按钮和标题栏
