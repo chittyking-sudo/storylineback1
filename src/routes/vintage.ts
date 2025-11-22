@@ -475,15 +475,21 @@ vintage.get('/', (c) => {
                     <div class="form-container">
                         <form id="create-form">
                             <div class="form-group">
-                                <label class="form-label">项目名称 *</label>
-                                <input type="text" class="form-input" id="project-name" placeholder="例如：魔法学院大冒险" required>
+                                <label class="form-label">
+                                    项目名称 <span style="color: var(--retro-pink);">*</span>
+                                </label>
+                                <input type="text" class="form-input" id="project-name" 
+                                       placeholder="例如：魔法学院大冒险" required>
+                                <div style="font-size: 12px; color: #666; margin-top: 5px;">为您的游戏项目起一个独特的名称</div>
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label">游戏类型 *</label>
+                                <label class="form-label">
+                                    游戏类型 <span style="color: var(--retro-pink);">*</span>
+                                </label>
                                 <select class="form-select" id="game-type" required>
-                                    <option value="">选择类型</option>
-                                    <option value="rpg">角色扮演 (RPG)</option>
+                                    <option value="">请选择游戏类型</option>
+                                    <option value="rpg">角色扮演游戏 (RPG)</option>
                                     <option value="adventure">冒险解谜</option>
                                     <option value="action">动作游戏</option>
                                     <option value="strategy">策略游戏</option>
@@ -491,35 +497,48 @@ vintage.get('/', (c) => {
                                     <option value="horror">恐怖惊悚</option>
                                     <option value="sci-fi">科幻太空</option>
                                     <option value="fantasy">奇幻魔法</option>
+                                    <option value="mystery">悬疑推理</option>
+                                    <option value="romance">恋爱养成</option>
                                 </select>
+                                <div style="font-size: 12px; color: #666; margin-top: 5px;">选择最符合您游戏主题的类型</div>
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label">生成内容类型 *</label>
+                                <label class="form-label">
+                                    生成内容类型 <span style="color: var(--retro-pink);">*</span>
+                                </label>
                                 <select class="form-select" id="content-type" required>
-                                    <option value="">选择内容</option>
+                                    <option value="">请选择内容类型</option>
+                                    <option value="worldview">世界观设定</option>
                                     <option value="story">主线剧情</option>
                                     <option value="quest">支线任务</option>
                                     <option value="character">角色设定</option>
                                     <option value="dialogue">对话脚本</option>
-                                    <option value="worldbuilding">世界观设定</option>
                                     <option value="item">道具装备</option>
                                     <option value="location">场景地点</option>
+                                    <option value="full">完整内容(世界观+剧情+角色)</option>
                                 </select>
+                                <div style="font-size: 12px; color: #666; margin-top: 5px;">选择您想要生成的内容类型</div>
                             </div>
 
                             <div class="form-group">
                                 <label class="form-label">详细描述（可选）</label>
-                                <textarea class="form-textarea" id="description" placeholder="描述您的创意和需求，例如：想要一个关于时间旅行的魔法学院故事..."></textarea>
+                                <textarea class="form-textarea" id="description" 
+                                          placeholder="描述您的创意和需求，例如：&#10;• 故事发生在一个魔法与科技并存的世界&#10;• 主角是一名时间旅行者&#10;• 包含5个主要角色&#10;• 风格偏向黑暗奇幻&#10;&#10;详细的描述能帮助AI生成更符合您期望的内容..."></textarea>
+                                <div style="font-size: 12px; color: #666; margin-top: 5px;">越详细的描述，生成的内容越精准</div>
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label">AI 模型选择 *</label>
+                                <label class="form-label">
+                                    AI 模型选择 <span style="color: var(--retro-pink);">*</span>
+                                </label>
                                 <select class="form-select" id="ai-model" required>
-                                    <option value="gemini">Google Gemini 2.0 Flash (推荐)</option>
-                                    <option value="gpt4o">OpenAI GPT-4o</option>
-                                    <option value="claude">Anthropic Claude</option>
+                                    <option value="gemini">Google Gemini 2.0 Flash (推荐 - 免费)</option>
+                                    <option value="gpt4o-mini">OpenAI GPT-4o-mini (快速)</option>
+                                    <option value="gpt4o">OpenAI GPT-4o (高质量)</option>
+                                    <option value="claude">Anthropic Claude (创意)</option>
                                 </select>
+                                <div style="font-size: 12px; color: #666; margin-top: 5px;">不同模型有不同特点，Gemini 免费且效果好</div>
                             </div>
 
                             <div id="message-box" class="message"></div>
@@ -644,12 +663,26 @@ vintage.get('/', (c) => {
             e.preventDefault();
             
             const formData = {
-                name: document.getElementById('project-name').value,
+                name: document.getElementById('project-name').value.trim(),
                 game_type: document.getElementById('game-type').value,
                 content_type: document.getElementById('content-type').value,
-                description: document.getElementById('description').value,
+                description: document.getElementById('description').value.trim(),
                 ai_model: document.getElementById('ai-model').value
             };
+            
+            // Validation
+            if (!formData.name) {
+                showMessage('请输入项目名称', 'error');
+                return;
+            }
+            if (!formData.game_type) {
+                showMessage('请选择游戏类型', 'error');
+                return;
+            }
+            if (!formData.content_type) {
+                showMessage('请选择内容类型', 'error');
+                return;
+            }
             
             // Show loading
             document.getElementById('loading-box').classList.add('active');
@@ -663,7 +696,7 @@ vintage.get('/', (c) => {
                 document.getElementById('loading-box').classList.remove('active');
                 
                 if (response.data.success) {
-                    showMessage('内容生成成功！正在跳转...', 'success');
+                    showMessage('内容生成成功！正在跳转到项目详情...', 'success');
                     setTimeout(() => {
                         window.location.href = '/retro/games/' + response.data.project.id;
                     }, 1500);
@@ -674,6 +707,7 @@ vintage.get('/', (c) => {
             } catch (error) {
                 document.getElementById('loading-box').classList.remove('active');
                 showMessage('生成失败: ' + (error.response?.data?.error || error.message), 'error');
+                console.error('Generation error:', error);
             }
         });
 
