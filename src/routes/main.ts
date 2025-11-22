@@ -235,7 +235,7 @@ main.get('/', async (c) => {
 
         .hero-subtitle {
             font-family: var(--font-main);
-            font-size: 36px;
+            font-size: 38px;
             color: var(--bg-beige);
             text-shadow: 2px 2px 0px var(--retro-black);
             -webkit-text-stroke: 1px var(--retro-black);

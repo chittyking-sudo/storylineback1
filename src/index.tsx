@@ -5,6 +5,7 @@ import api from './routes/api';
 import main from './routes/main';
 import retro from './routes/retro';
 import retroGames from './routes/retro-games';
+import vintage from './routes/vintage';
 import type { Env } from './types';
 
 const app = new Hono<{ Bindings: Env }>();
@@ -21,6 +22,7 @@ try {
 
 // Mount routes
 app.route('/api', api);
+app.route('/vintage', vintage);
 app.route('/', main);
 app.route('/retro', retro);
 app.route('/retro/games', retroGames);
