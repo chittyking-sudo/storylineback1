@@ -1,45 +1,28 @@
 import { Hono } from 'hono';
 
-const retro = new Hono();
+const main = new Hono();
 
-retro.get('/', (c) => {
+main.get('/', (c) => {
   return c.html(`
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>游戏内容生成器 - v2.2 经典版</title>
+    <title>游戏内容生成器 - v3.0</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
     <style>
-        @font-face {
-            font-family: 'Pixeloid Sans';
-            src: url('https://www.genspark.ai/api/files/s/OSp0E2Uz') format('woff2');
-            font-weight: bold;
-            font-style: normal;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: 'FZG CN';
-            src: url('https://www.genspark.ai/api/files/s/3xl03SBJ') format('opentype'),
-                 url('https://www.genspark.ai/api/files/s/0aHham4g') format('truetype');
-            font-weight: normal;
-            font-style: normal;
-            font-display: swap;
-        }
-
         :root {
-            --bg-beige: #f0d7b7;
-            --retro-pink: #e66285;
-            --retro-green: #2c9560;
+            --bg-beige: #ebddc3;
+            --retro-pink: #ef7ca6;
+            --retro-green: #57ae77;
             --retro-blue: #5c7cfa;
-            --retro-dark-blue: #415bc4;
-            --border-color: #000100;
-            --shadow: 4px 4px 0px #000100;
-            --font-main: 'Pixeloid Sans', 'Arial Black', 'Impact', sans-serif;
-            --font-ui: 'FZG CN', 'Verdana', sans-serif;
+            --retro-dark-blue: #000000;
+            --border-color: #000000;
+            --shadow: 4px 4px 0px #000000;
+            --font-main: 'Arial Black', 'Impact', sans-serif;
+            --font-ui: 'Verdana', sans-serif;
         }
 
         * {
@@ -57,7 +40,7 @@ retro.get('/', (c) => {
             align-items: center;
         }
 
-        /* Main Browser Window - 使用附件的尺寸 */
+        /* Main Browser Window */
         .browser-window {
             width: 1200px;
             height: 800px;
@@ -77,6 +60,20 @@ retro.get('/', (c) => {
             display: flex;
             align-items: center;
             gap: 10px;
+            position: relative;
+        }
+
+        .header-title {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 10px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .nav-controls {
+            margin-left: 180px;
         }
 
         .nav-controls i {
@@ -111,11 +108,6 @@ retro.get('/', (c) => {
             border: 2px solid black; 
             background: #ccc;
             cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .win-btn:hover {
-            background: var(--retro-pink);
         }
 
         /* Layout Container */
@@ -135,7 +127,6 @@ retro.get('/', (c) => {
             flex-direction: column;
             gap: 15px;
             position: relative;
-            overflow-y: auto;
         }
 
         .sidebar-btn {
@@ -156,8 +147,8 @@ retro.get('/', (c) => {
             box-shadow: 1px 1px 0px var(--border-color);
         }
 
-        .btn-green { background: var(--retro-green); color: white; }
-        .btn-pink { background: var(--retro-pink); color: white; }
+        .btn-green { background: var(--retro-green); }
+        .btn-pink { background: var(--retro-pink); }
         .btn-blue { background: var(--retro-blue); color: white; }
 
         .spacer {
@@ -166,15 +157,12 @@ retro.get('/', (c) => {
 
         .footer-socials {
             margin-top: auto;
-            padding-top: 20px;
-            border-top: 2px solid var(--border-color);
         }
         
         .social-row {
             display: flex;
             gap: 5px;
             margin-bottom: 10px;
-            flex-wrap: wrap;
         }
 
         .social-icon {
@@ -187,17 +175,16 @@ retro.get('/', (c) => {
             justify-content: center;
             font-size: 14px;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: transform 0.1s;
         }
 
-        .social-icon:hover {
-            background: var(--retro-green);
+        .social-icon:active {
+            transform: scale(0.9);
         }
 
         .copyright {
             font-size: 12px;
             font-weight: bold;
-            text-align: center;
         }
 
         /* Main Content Area */
@@ -212,18 +199,17 @@ retro.get('/', (c) => {
         .hero {
             background-color: var(--retro-dark-blue);
             background-image: 
-                linear-gradient(45deg, var(--retro-pink) 25%, transparent 25%), 
-                linear-gradient(-45deg, var(--retro-pink) 25%, transparent 25%), 
-                linear-gradient(45deg, transparent 75%, var(--retro-pink) 75%), 
-                linear-gradient(-45deg, transparent 75%, var(--retro-pink) 75%);
+                linear-gradient(45deg, #ff85c2 25%, transparent 25%), 
+                linear-gradient(-45deg, #ff85c2 25%, transparent 25%), 
+                linear-gradient(45deg, transparent 75%, #ff85c2 75%), 
+                linear-gradient(-45deg, transparent 75%, #ff85c2 75%);
             background-size: 20px 20px;
             background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
-            
             position: relative;
             padding: 40px;
             text-align: center;
             border-bottom: 3px solid var(--border-color);
-            min-height: 200px;
+            min-height: 350px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -236,7 +222,7 @@ retro.get('/', (c) => {
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
             background: var(--retro-dark-blue);
-            opacity: 0.85; 
+            opacity: 0.8; 
             z-index: -1;
         }
 
@@ -275,26 +261,17 @@ retro.get('/', (c) => {
             overflow-y: auto;
         }
 
-        .section-title {
-            font-family: var(--font-main);
-            font-size: 36px;
-            color: var(--retro-pink);
-            text-shadow: 2px 2px 0px var(--border-color);
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
         .form-container {
             max-width: 800px;
             margin: 0 auto;
             background: var(--bg-beige);
             border: 3px solid var(--border-color);
-            box-shadow: 6px 6px 0px var(--border-color);
             padding: 30px;
+            box-shadow: 5px 5px 0px black;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .form-label {
@@ -302,10 +279,9 @@ retro.get('/', (c) => {
             font-weight: bold;
             margin-bottom: 8px;
             font-size: 16px;
-            color: var(--border-color);
         }
 
-        .form-label .required {
+        .required {
             color: var(--retro-pink);
         }
 
@@ -322,46 +298,40 @@ retro.get('/', (c) => {
         .form-input:focus, .form-select:focus, .form-textarea:focus {
             outline: none;
             border-color: var(--retro-pink);
-            box-shadow: inset 2px 2px 0px rgba(230, 98, 133, 0.2);
+            box-shadow: inset 2px 2px 0px rgba(239, 124, 166, 0.2);
         }
 
         .form-select {
             cursor: pointer;
-            /* 移除 appearance: none 以确保下拉选项正常显示 */
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23000100' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23000000' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
             background-position: right 12px center;
             padding-right: 40px;
         }
 
         .form-textarea {
-            min-height: 100px;
+            min-height: 120px;
             resize: vertical;
         }
 
         .form-hint {
-            font-size: 12px;
-            color: #666;
             margin-top: 5px;
+            font-size: 12px;
+            color: #555;
         }
 
         .btn-submit {
             width: 100%;
-            padding: 16px;
-            background: var(--retro-green);
-            color: white;
+            padding: 15px;
+            background: var(--retro-pink);
             border: 3px solid var(--border-color);
-            box-shadow: 4px 4px 0px var(--border-color);
+            font-weight: bold;
+            font-size: 20px;
             font-family: var(--font-main);
-            font-size: 24px;
             text-transform: uppercase;
             cursor: pointer;
+            box-shadow: 4px 4px 0px var(--border-color);
             transition: all 0.1s;
-            margin-top: 10px;
-        }
-
-        .btn-submit:hover {
-            background: var(--retro-pink);
         }
 
         .btn-submit:active {
@@ -370,9 +340,8 @@ retro.get('/', (c) => {
         }
 
         .btn-submit:disabled {
-            background: #ccc;
+            opacity: 0.5;
             cursor: not-allowed;
-            opacity: 0.6;
         }
 
         /* Loading & Messages */
@@ -381,10 +350,7 @@ retro.get('/', (c) => {
             text-align: center;
             padding: 20px;
             font-weight: bold;
-            background: var(--retro-blue);
-            color: white;
-            border: 2px solid var(--border-color);
-            margin-bottom: 20px;
+            color: var(--retro-blue);
         }
 
         .loading.active {
@@ -393,30 +359,19 @@ retro.get('/', (c) => {
 
         .message {
             padding: 15px;
-            margin-bottom: 20px;
+            margin: 15px 0;
             border: 2px solid var(--border-color);
             font-weight: bold;
             display: none;
         }
 
         .message.success {
-            background: var(--retro-green);
-            color: white;
+            background: rgba(87, 174, 119, 0.3);
             display: block;
         }
 
         .message.error {
-            background: var(--retro-pink);
-            color: white;
-            display: block;
-        }
-
-        /* Views */
-        .view {
-            display: none;
-        }
-
-        .view.active {
+            background: rgba(239, 124, 166, 0.3);
             display: block;
         }
 
@@ -425,90 +380,82 @@ retro.get('/', (c) => {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 20px;
-            max-width: 1000px;
-            margin: 0 auto;
+            margin-top: 20px;
         }
 
         .project-card {
             background: var(--bg-beige);
             border: 3px solid var(--border-color);
-            box-shadow: 5px 5px 0px var(--border-color);
+            box-shadow: 5px 5px 0px black;
             padding: 20px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.1s;
         }
 
         .project-card:hover {
             transform: translate(-2px, -2px);
-            box-shadow: 7px 7px 0px var(--border-color);
+            box-shadow: 7px 7px 0px black;
         }
 
         .project-title {
-            font-family: var(--font-main);
+            font-weight: bold;
             font-size: 20px;
-            color: var(--retro-pink);
             margin-bottom: 10px;
+            color: var(--retro-pink);
         }
 
         .project-desc {
             font-size: 14px;
-            line-height: 1.6;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
         .project-meta {
             font-size: 12px;
-            color: #666;
-            border-top: 2px solid var(--border-color);
-            padding-top: 10px;
+            color: #555;
+        }
+
+        /* Views */
+        .view {
+            display: none;
+        }
+
+        .view.active {
+            display: flex;
+            flex-direction: column;
         }
 
         /* Responsive */
-        @media (max-width: 1280px) {
+        @media (max-width: 1024px) {
             .browser-window {
                 width: 95vw;
-                height: 90vh;
-            }
-        }
-
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-
-            .browser-window {
-                width: 100%;
-                height: 100%;
+                height: 95vh;
             }
 
             .sidebar {
-                display: none;
+                width: 200px;
             }
 
             .hero-title {
                 font-size: 48px;
             }
-
-            .form-container {
-                padding: 20px;
-            }
         }
+
     </style>
 </head>
 <body>
 
     <div class="browser-window">
         <div class="window-header">
-            <div style="position:absolute; top:10px; left:10px; font-size:10px; font-weight:bold; color:#555;">游戏内容生成器 - v2.2 经典版</div>
-            <div class="nav-controls" style="margin-left: 200px;">
-                <i class="fa-solid fa-arrow-left" onclick="window.history.back()" title="后退"></i>
-                <i class="fa-solid fa-arrow-right" onclick="window.history.forward()" title="前进"></i>
-                <i class="fa-solid fa-rotate-right" onclick="window.location.reload()" title="刷新"></i>
+            <div class="header-title">游戏内容生成器 - v3.0</div>
+            <div class="nav-controls">
+                <i class="fa-solid fa-arrow-left" onclick="window.history.back()"></i>
+                <i class="fa-solid fa-arrow-right" onclick="window.history.forward()"></i>
+                <i class="fa-solid fa-rotate-right" onclick="location.reload()"></i>
             </div>
-            <div class="address-bar">http://localhost:3000/game-generator</div>
+            <div class="address-bar">http://game-generator.ai/create</div>
             <div class="window-controls">
-                <div class="win-btn" onclick="alert('最小化')" title="最小化"></div>
-                <div class="win-btn" onclick="if(confirm('确定关闭？')) window.close()" title="关闭"></div>
+                <div class="win-btn" onclick="alert('最小化功能')"></div>
+                <div class="win-btn" onclick="alert('关闭功能')"></div>
             </div>
         </div>
 
@@ -519,22 +466,22 @@ retro.get('/', (c) => {
                     <i class="fa-solid fa-house"></i> 主页
                 </div>
                 <div class="sidebar-btn btn-pink" onclick="showView('create')">
-                    <i class="fa-solid fa-plus"></i> 创建项目
+                    <i class="fa-solid fa-magic"></i> 创建
                 </div>
                 <div class="sidebar-btn btn-green" onclick="showView('projects')">
-                    <i class="fa-solid fa-folder-open"></i> 我的项目
+                    <i class="fa-solid fa-folder"></i> 项目
                 </div>
-                <div class="sidebar-btn btn-blue" onclick="window.location.href='/vintage'">
-                    <i class="fa-solid fa-desktop"></i> v3.0版本
+                <div class="sidebar-btn btn-blue" onclick="window.location.href='/retro'">
+                    <i class="fa-solid fa-clock-rotate-left"></i> v2.2
                 </div>
 
                 <div class="spacer"></div>
 
+                <div class="sidebar-btn btn-green" onclick="window.open('/retro/games', '_blank')">
+                    <i class="fa-solid fa-book"></i> 项目详情
+                </div>
                 <div class="sidebar-btn btn-green" onclick="window.open('https://github.com/chittyking-sudo/storylineback1', '_blank')">
                     <i class="fa-brands fa-github"></i> GitHub
-                </div>
-                <div class="sidebar-btn btn-green" onclick="window.location.href='/retro/games'">
-                    <i class="fa-solid fa-list"></i> 项目列表
                 </div>
 
                 <div class="footer-socials">
@@ -543,9 +490,9 @@ retro.get('/', (c) => {
                         <div class="social-icon"><i class="fa-brands fa-twitter"></i></div>
                         <div class="social-icon"><i class="fa-brands fa-youtube"></i></div>
                         <div class="social-icon"><i class="fa-solid fa-paper-plane"></i></div>
-                        <div class="social-icon"><i class="fa-solid fa-globe"></i></div>
+                        <div class="social-icon"><i class="fa-brands fa-github"></i></div>
                     </div>
-                    <div class="copyright">© 2025 Game Generator</div>
+                    <div class="copyright">© 2024 游戏内容生成器</div>
                 </div>
             </div>
 
@@ -557,30 +504,33 @@ retro.get('/', (c) => {
                         <h1 class="hero-title">游戏内容</h1>
                         <h1 class="hero-title green">生成器</h1>
                         <div class="hero-subtitle-box">
-                            基于 AI 的游戏内容自动生成系统 - 经典复古版
+                            基于 AI 技术的游戏内容自动生成系统
                         </div>
                     </div>
 
                     <div class="form-section">
-                        <div class="section-title">欢迎使用</div>
-                        <div style="max-width: 800px; margin: 0 auto; text-align: center; padding: 40px;">
-                            <p style="font-size: 18px; line-height: 1.8; margin-bottom: 30px;">
-                                <strong>✨ 利用 AI 技术自动生成游戏内容</strong><br><br>
-                                • 生成游戏世界观、剧情、角色和对话<br>
-                                • 支持多种游戏类型和风格<br>
-                                • 完全免费，本地存储
-                            </p>
-                            <div class="sidebar-btn btn-pink" onclick="showView('create')" style="max-width: 300px; margin: 0 auto; justify-content: center;">
-                                <i class="fa-solid fa-magic"></i> 开始创作
+                        <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+                            <h2 style="font-family: var(--font-main); font-size: 36px; margin-bottom: 20px;">✨ 核心功能</h2>
+                            <div style="text-align: left; line-height: 1.8; font-size: 16px;">
+                                <p>• 🌍 <strong>世界观设定</strong> - 历史背景、地理环境、文化体系</p>
+                                <p>• 📖 <strong>主线剧情</strong> - 完整故事架构、情节设计</p>
+                                <p>• 🎭 <strong>角色创建</strong> - 性格塑造、背景故事、关系网络</p>
+                                <p>• 💬 <strong>对话脚本</strong> - 符合角色性格的精彩对话</p>
+                                <p>• ⚔️ <strong>任务系统</strong> - 主线任务、支线任务设计</p>
+                                <p>• 🗺️ <strong>场景地点</strong> - 地图设计、场景描述</p>
+                                <p>• 🎮 <strong>道具装备</strong> - 物品设定、属性平衡</p>
                             </div>
+                            <button onclick="showView('create')" style="margin-top: 30px; padding: 15px 40px; background: var(--retro-pink); border: 3px solid black; font-weight: bold; font-size: 20px; cursor: pointer; box-shadow: 4px 4px 0px black;">
+                                <i class="fas fa-magic"></i> 开始创作
+                            </button>
                         </div>
                     </div>
                 </div>
 
                 <!-- Create View -->
                 <div id="create-view" class="view">
-                    <div class="hero" style="min-height: 150px;">
-                        <h1 class="hero-title" style="font-size: 48px;">创建新项目</h1>
+                    <div class="hero" style="min-height: 200px;">
+                        <h1 class="hero-title" style="font-size: 60px;">创建新项目</h1>
                     </div>
 
                     <div class="form-section">
@@ -639,7 +589,13 @@ retro.get('/', (c) => {
                                         详细描述（可选）
                                     </label>
                                     <textarea class="form-textarea" id="description" 
-                                              placeholder="描述您的创意和需求，例如：&#10;• 故事发生在一个魔法与科技并存的世界&#10;• 主角是一名时间旅行者&#10;• 包含5个主要角色&#10;• 风格偏向黑暗奇幻&#10;&#10;详细的描述能帮助AI生成更符合您期望的内容..."></textarea>
+                                              placeholder="描述您的创意和需求，例如：
+• 故事发生在一个魔法与科技并存的世界
+• 主角是一名时间旅行者
+• 包含5个主要角色
+• 风格偏向黑暗奇幻
+
+详细的描述能帮助AI生成更符合您期望的内容..."></textarea>
                                     <div class="form-hint">越详细的描述，生成的内容越精准</div>
                                 </div>
 
@@ -671,16 +627,13 @@ retro.get('/', (c) => {
 
                 <!-- Projects View -->
                 <div id="projects-view" class="view">
-                    <div class="hero" style="min-height: 150px;">
-                        <h1 class="hero-title" style="font-size: 48px;">我的项目</h1>
+                    <div class="hero" style="min-height: 200px;">
+                        <h1 class="hero-title" style="font-size: 60px;">我的项目</h1>
                     </div>
 
                     <div class="form-section">
                         <div id="projects-list" class="projects-grid">
-                            <div style="grid-column: 1/-1; text-align: center; padding: 60px;">
-                                <i class="fas fa-folder-open" style="font-size: 64px; opacity: 0.3;"></i>
-                                <p style="margin-top: 30px; font-size: 18px; opacity: 0.6;">暂无项目，点击"创建项目"开始生成内容</p>
-                            </div>
+                            <!-- Projects will be loaded here -->
                         </div>
                     </div>
                 </div>
@@ -711,8 +664,8 @@ retro.get('/', (c) => {
                 if (projects.length === 0) {
                     container.innerHTML = \`
                         <div style="grid-column: 1/-1; text-align: center; padding: 60px;">
-                            <i class="fas fa-folder-open" style="font-size: 64px; opacity: 0.3;"></i>
-                            <p style="margin-top: 30px; font-size: 18px; opacity: 0.6;">暂无项目，点击"创建项目"开始生成内容</p>
+                            <i class="fas fa-folder-open" style="font-size: 60px; opacity: 0.3;"></i>
+                            <p style="margin-top: 20px; font-size: 18px; opacity: 0.6;">暂无项目，点击左侧"创建"开始生成内容</p>
                         </div>
                     \`;
                     return;
@@ -721,12 +674,10 @@ retro.get('/', (c) => {
                 container.innerHTML = projects.map(project => \`
                     <div class="project-card" onclick="viewProject(\${project.id})">
                         <div class="project-title">\${project.name}</div>
-                        <div class="project-desc">
-                            <strong>类型:</strong> \${project.game_type || '未指定'}<br>
-                            <strong>内容:</strong> \${project.content_type || '未指定'}
-                        </div>
+                        <div class="project-desc"><strong>类型:</strong> \${project.game_type || '未指定'}</div>
+                        <div class="project-desc"><strong>内容:</strong> \${project.content_type || '未指定'}</div>
                         <div class="project-meta">
-                            <i class="fas fa-calendar"></i> \${new Date(project.created_at).toLocaleDateString('zh-CN')}
+                            <i class="fas fa-calendar"></i> 创建于 \${new Date(project.created_at).toLocaleDateString('zh-CN')}
                         </div>
                     </div>
                 \`).join('');
@@ -747,22 +698,24 @@ retro.get('/', (c) => {
             e.preventDefault();
             
             const formData = {
-                name: document.getElementById('project-name').value.trim(),
+                name: document.getElementById('project-name').value,
                 game_type: document.getElementById('game-type').value,
                 content_type: document.getElementById('content-type').value,
-                description: document.getElementById('description').value.trim(),
+                description: document.getElementById('description').value,
                 ai_model: document.getElementById('ai-model').value
             };
             
             // Validation
-            if (!formData.name) {
+            if (!formData.name.trim()) {
                 showMessage('请输入项目名称', 'error');
                 return;
             }
+            
             if (!formData.game_type) {
                 showMessage('请选择游戏类型', 'error');
                 return;
             }
+            
             if (!formData.content_type) {
                 showMessage('请选择内容类型', 'error');
                 return;
@@ -782,7 +735,7 @@ retro.get('/', (c) => {
                 document.getElementById('submit-btn').disabled = false;
                 
                 if (response.data.success) {
-                    showMessage('内容生成成功！正在跳转到项目详情...', 'success');
+                    showMessage('内容生成成功！正在跳转到详情页...', 'success');
                     setTimeout(() => {
                         window.location.href = '/retro/games/' + response.data.project.id;
                     }, 1500);
@@ -794,7 +747,6 @@ retro.get('/', (c) => {
                 document.getElementById('loading-box').classList.remove('active');
                 document.getElementById('submit-btn').disabled = false;
                 showMessage('生成失败: ' + (error.response?.data?.error || error.message), 'error');
-                console.error('Generation error:', error);
             }
         });
 
@@ -805,10 +757,8 @@ retro.get('/', (c) => {
             msgBox.className = 'message ' + type;
         }
 
-        // Initialize - load projects count for sidebar
-        window.addEventListener('DOMContentLoaded', () => {
-            // Could add project count badge to sidebar here
-        });
+        // Load projects on page load if needed
+        // loadProjects();
     </script>
 
 </body>
@@ -816,4 +766,4 @@ retro.get('/', (c) => {
   `);
 });
 
-export default retro;
+export default main;

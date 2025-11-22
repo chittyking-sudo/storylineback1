@@ -2,9 +2,9 @@ import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { serveStatic } from 'hono/cloudflare-workers';
 import api from './routes/api';
+import main from './routes/main';
 import retro from './routes/retro';
 import retroGames from './routes/retro-games';
-import vintage from './routes/vintage';
 import type { Env } from './types';
 
 const app = new Hono<{ Bindings: Env }>();
@@ -21,8 +21,8 @@ try {
 
 // Mount routes
 app.route('/api', api);
-app.route('/vintage', vintage);
+app.route('/', main);              // v3.0 as default (new design)
+app.route('/retro', retro);        // v2.2 classic version
 app.route('/retro/games', retroGames);
-app.route('/', retro); // v2.2 as default
 
 export default app;
