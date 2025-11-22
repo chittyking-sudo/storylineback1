@@ -20,6 +20,23 @@ retroGames.get('/projects', async (c) => {
           <title>游戏项目列表 - Retro Style</title>
           <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
           <style>
+              @font-face {
+                  font-family: 'Pixeloid Sans';
+                  src: url('https://www.genspark.ai/api/files/s/OSp0E2Uz') format('woff2');
+                  font-weight: bold;
+                  font-style: normal;
+                  font-display: swap;
+              }
+
+              @font-face {
+                  font-family: 'FZG CN';
+                  src: url('https://www.genspark.ai/api/files/s/3xl03SBJ') format('opentype'),
+                       url('https://www.genspark.ai/api/files/s/0aHham4g') format('truetype');
+                  font-weight: normal;
+                  font-style: normal;
+                  font-display: swap;
+              }
+
               :root {
                   --bg-beige: #f0d7b7;
                   --retro-pink: #e66285;
@@ -31,7 +48,7 @@ retroGames.get('/projects', async (c) => {
                   margin: 0;
                   padding: 20px;
                   background: #222;
-                  font-family: 'Verdana', sans-serif;
+                  font-family: 'FZG CN', 'Microsoft YaHei', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
               }
               .container {
                   max-width: 1200px;
@@ -42,7 +59,7 @@ retroGames.get('/projects', async (c) => {
                   padding: 30px;
               }
               h1 {
-                  font-family: 'Arial Black', sans-serif;
+                  font-family: 'Pixeloid Sans', 'Arial Black', sans-serif;
                   font-size: 48px;
                   color: var(--retro-pink);
                   text-shadow: 3px 3px 0 black;
@@ -215,6 +232,23 @@ retroGames.get('/project/:id', async (c) => {
           <title>${project.name} - 项目详情</title>
           <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
           <style>
+              @font-face {
+                  font-family: 'Pixeloid Sans';
+                  src: url('https://www.genspark.ai/api/files/s/OSp0E2Uz') format('woff2');
+                  font-weight: bold;
+                  font-style: normal;
+                  font-display: swap;
+              }
+
+              @font-face {
+                  font-family: 'FZG CN';
+                  src: url('https://www.genspark.ai/api/files/s/3xl03SBJ') format('opentype'),
+                       url('https://www.genspark.ai/api/files/s/0aHham4g') format('truetype');
+                  font-weight: normal;
+                  font-style: normal;
+                  font-display: swap;
+              }
+
               :root {
                   --bg-beige: #f0d7b7;
                   --retro-pink: #e66285;
@@ -226,7 +260,7 @@ retroGames.get('/project/:id', async (c) => {
                   margin: 0;
                   padding: 20px;
                   background: #222;
-                  font-family: 'Verdana', sans-serif;
+                  font-family: 'FZG CN', 'Microsoft YaHei', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
               }
               .container {
                   max-width: 1400px;
@@ -237,7 +271,7 @@ retroGames.get('/project/:id', async (c) => {
                   padding: 30px;
               }
               h1 {
-                  font-family: 'Arial Black', sans-serif;
+                  font-family: 'Pixeloid Sans', 'Arial Black', sans-serif;
                   font-size: 48px;
                   color: var(--retro-pink);
                   text-shadow: 3px 3px 0 black;
@@ -246,7 +280,7 @@ retroGames.get('/project/:id', async (c) => {
                   margin-bottom: 30px;
               }
               h2 {
-                  font-family: 'Arial Black', sans-serif;
+                  font-family: 'Pixeloid Sans', 'Arial Black', sans-serif;
                   font-size: 32px;
                   color: var(--retro-green);
                   text-shadow: 2px 2px 0 black;

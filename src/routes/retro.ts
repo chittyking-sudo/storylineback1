@@ -10,6 +10,23 @@ const retroHTML = `<!DOCTYPE html>
     <title>Retro Web Explorer - v2025</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        @font-face {
+            font-family: 'Pixeloid Sans';
+            src: url('https://www.genspark.ai/api/files/s/OSp0E2Uz') format('woff2');
+            font-weight: bold;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'FZG CN';
+            src: url('https://www.genspark.ai/api/files/s/3xl03SBJ') format('opentype'),
+                 url('https://www.genspark.ai/api/files/s/0aHham4g') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
         :root {
             --bg-beige: #f0d7b7;
             --retro-pink: #e66285;
@@ -18,8 +35,8 @@ const retroHTML = `<!DOCTYPE html>
             --retro-dark-blue: #415bc4;
             --border-color: #000100;
             --shadow: 4px 4px 0px #000100;
-            --font-main: 'Arial Black', 'Impact', sans-serif;
-            --font-ui: 'Verdana', sans-serif;
+            --font-main: 'Pixeloid Sans', 'Arial Black', 'Impact', sans-serif;
+            --font-ui: 'FZG CN', 'Microsoft YaHei', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
         }
 
         * {

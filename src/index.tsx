@@ -12,8 +12,12 @@ const app = new Hono<{ Bindings: Env }>();
 // Enable CORS for API routes
 app.use('/api/*', cors());
 
-// Serve static files
-app.use('/static/*', serveStatic({ root: './public' }));
+// Serve static files (only for development)
+try {
+  app.use('/static/*', serveStatic({ root: './public' }));
+} catch (e) {
+  // Static files will be handled by Cloudflare Pages in production
+}
 
 // Mount routes
 app.route('/api', api);
