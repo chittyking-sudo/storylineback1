@@ -235,7 +235,7 @@ main.get('/', async (c) => {
 
         .hero-subtitle {
             font-family: var(--font-main);
-            font-size: 36px;
+            font-size: 42px;
             color: var(--bg-beige);
             text-shadow: 2px 2px 0px var(--retro-black);
             -webkit-text-stroke: 1px var(--retro-black);
@@ -260,7 +260,7 @@ main.get('/', async (c) => {
 
         .section-header {
             font-family: var(--font-main);
-            font-size: 28px;
+            font-size: 32px;
             color: var(--retro-pink);
             text-shadow: 2px 2px 0px var(--retro-black);
             -webkit-text-stroke: 1px var(--retro-black);
@@ -282,7 +282,7 @@ main.get('/', async (c) => {
         .form-select,
         .form-textarea {
             width: 100%;
-            padding: 10px;
+            padding: 24px;
             border: 2px solid var(--retro-black);
             background: white;
             font-family: var(--font-ui);
@@ -386,7 +386,7 @@ main.get('/', async (c) => {
         .project-item {
             border: 2px solid var(--retro-black);
             background: var(--bg-beige);
-            padding: 15px;
+            padding: 24px;
             margin-bottom: 15px;
             box-shadow: 3px 3px 0px var(--retro-black);
             display: flex;
@@ -396,7 +396,7 @@ main.get('/', async (c) => {
 
         .project-info h3 {
             font-weight: bold;
-            font-size: 16px;
+            font-size: 24px;
             margin-bottom: 5px;
         }
 
