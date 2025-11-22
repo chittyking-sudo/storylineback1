@@ -2,6 +2,7 @@ import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { serveStatic } from 'hono/cloudflare-workers';
 import api from './routes/api';
+import retro from './routes/retro';
 import type { Env } from './types';
 
 const app = new Hono<{ Bindings: Env }>();
@@ -12,8 +13,9 @@ app.use('/api/*', cors());
 // Serve static files
 app.use('/static/*', serveStatic({ root: './public' }));
 
-// Mount API routes
+// Mount routes
 app.route('/api', api);
+app.route('/retro', retro);
 
 // Main page
 app.get('/', (c) => {
@@ -57,6 +59,12 @@ app.get('/', (c) => {
                 <p class="text-xl text-gray-600">
                     基于 AI 多智能体协作，自动生成游戏世界观、剧情、角色和对话
                 </p>
+                <div class="mt-4">
+                    <a href="/retro" target="_blank" class="inline-block bg-gradient-to-r from-pink-500 to-purple-600 text-white px-6 py-3 rounded-lg font-bold hover:from-pink-600 hover:to-purple-700 transition-all transform hover:scale-105 shadow-lg">
+                        <i class="fas fa-desktop mr-2"></i>
+                        🎨 查看复古风格页面
+                    </a>
+                </div>
             </div>
 
             <!-- Agent Architecture -->

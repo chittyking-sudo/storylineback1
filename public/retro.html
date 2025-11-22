@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retro Web Explorer - v2025</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-beige: #fdf5e6;
+            --retro-pink: #ff85c2;
+            --retro-green: #45c4a0;
+            --retro-blue: #5c7cfa;
+            --retro-dark-blue: #415bc4;
+            --border-color: #000000;
+            --shadow: 4px 4px 0px #000000;
+            --font-main: 'Arial Black', 'Impact', sans-serif;
+            --font-ui: 'Verdana', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #222;
+            font-family: var(--font-ui);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Main Browser Window */
+        .browser-window {
+            width: 1200px;
+            height: 800px;
+            background: var(--bg-beige);
+            border: 3px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            overflow: hidden;
+        }
+
+        /* Window Header / Address Bar */
+        .window-header {
+            background: #e0e0e0;
+            border-bottom: 3px solid var(--border-color);
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .window-title {
+            position: absolute;
+            top: -25px;
+            left: 20px;
+            background: var(--retro-pink);
+            color: black;
+            padding: 2px 10px;
+            font-weight: bold;
+            font-size: 12px;
+            border: 2px solid black;
+        }
+
+        .nav-controls i {
+            font-size: 20px;
+            margin-right: 10px;
+            cursor: pointer;
+            color: #555;
+        }
+
+        .address-bar {
+            flex-grow: 1;
+            background: white;
+            border: 2px solid var(--border-color);
+            padding: 5px 10px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .win-btn {
+            width: 15px; 
+            height: 15px; 
+            border: 2px solid black; 
+            background: #ccc;
+        }
+
+        /* Layout Container */
+        .viewport {
+            display: flex;
+            flex: 1;
+            overflow: hidden; /* prevents scroll for this demo */
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: var(--bg-beige);
+            border-right: 3px solid var(--border-color);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            position: relative;
+        }
+
+        .sidebar-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            border: 2px solid var(--border-color);
+            box-shadow: 3px 3px 0px var(--border-color);
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.1s;
+            text-transform: capitalize;
+        }
+
+        .sidebar-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px var(--border-color);
+        }
+
+        .btn-green { background: var(--retro-green); }
+        .btn-pink { background: var(--retro-pink); }
+
+        .spacer {
+            height: 20px;
+        }
+
+        .footer-socials {
+            margin-top: auto;
+        }
+        
+        .social-row {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .social-icon {
+            width: 30px;
+            height: 30px;
+            background: var(--retro-pink);
+            border: 2px solid black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .copyright {
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* Main Content Area */
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        /* Hero Section */
+        .hero {
+            background-color: var(--retro-dark-blue);
+            /* Creating the checkerboard/shape pattern using CSS gradients */
+            background-image: 
+                linear-gradient(45deg, #ff85c2 25%, transparent 25%), 
+                linear-gradient(-45deg, #ff85c2 25%, transparent 25%), 
+                linear-gradient(45deg, transparent 75%, #ff85c2 75%), 
+                linear-gradient(-45deg, transparent 75%, #ff85c2 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+            
+            /* Overlay for the blue area to separate checkers */
+            position: relative;
+            padding: 40px;
+            text-align: center;
+            border-bottom: 3px solid var(--border-color);
+            min-height: 350px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1;
+        }
+
+        /* Blue block overlay to mimic image layout */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--retro-dark-blue);
+            opacity: 0.8; 
+            z-index: -1;
+            /* Add geometric shapes via clip-path if needed, keeping it simple for stability */
+        }
+
+        .hero-title {
+            font-family: var(--font-main);
+            font-size: 72px;
+            line-height: 0.9;
+            color: var(--retro-pink);
+            text-shadow: 4px 4px 0px #000;
+            -webkit-text-stroke: 2px black;
+            margin: 0;
+            z-index: 2;
+        }
+
+        .hero-title.green {
+            color: var(--retro-green);
+        }
+
+        .hero-subtitle-box {
+            margin-top: 20px;
+            background: var(--bg-beige);
+            border: 2px solid black;
+            padding: 10px 20px;
+            box-shadow: 4px 4px 0px black;
+            font-weight: bold;
+            font-size: 18px;
+            z-index: 2;
+            max-width: 80%;
+        }
+
+        /* Grid Section */
+        .grid-section {
+            padding: 20px;
+            background: white;
+            display: flex;
+            gap: 20px;
+            flex: 1;
+            /* Bottom Checkered Strip */
+            border-bottom: 20px solid black; 
+            background-image: repeating-linear-gradient(
+                90deg,
+                var(--retro-green) 0,
+                var(--retro-green) 20px,
+                black 20px,
+                black 40px
+            );
+            background-size: 100% 20px;
+            background-repeat: no-repeat;
+            background-position: bottom;
+            padding-bottom: 40px;
+        }
+
+        .card {
+            flex: 1;
+            border: 2px solid black;
+            background: var(--bg-beige);
+            box-shadow: 5px 5px 0px black;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-header {
+            background: var(--retro-pink);
+            border-bottom: 2px solid black;
+            padding: 5px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .card-header.green { background: var(--retro-green); }
+
+        .win-icons {
+            display: flex;
+            gap: 2px;
+        }
+        .win-icon-box {
+            width: 12px; height: 12px; border: 1px solid black; background: white;
+        }
+
+        .card-body {
+            padding: 10px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--retro-green); /* Inner color matches image */
+        }
+        
+        /* Simulating the illustrations with CSS placeholders */
+        .illustration-placeholder {
+            width: 100%;
+            height: 100px;
+            background: #e0e0e0;
+            border: 2px solid black;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: #333;
+        }
+
+        /* Specific card body colors based on image */
+        .card:nth-child(1) .card-body { background: #e6aeb8; } /* Pinkish */
+        .card:nth-child(2) .card-body { background: #6dc9a6; } /* Greenish */
+        .card:nth-child(3) .card-body { background: #e6aeb8; } /* Pinkish */
+
+        .card-btn-lg {
+            width: 100%;
+            padding: 10px;
+            background: var(--retro-pink);
+            border: 2px solid black;
+            font-weight: bold;
+            text-align: center;
+            font-size: 20px;
+            font-family: var(--font-main);
+            text-transform: uppercase;
+        }
+        
+        .card:nth-child(2) .card-btn-lg { background: var(--retro-green); }
+
+    </style>
+</head>
+<body>
+
+    <div class="browser-window">
+        <div class="window-header">
+            <div style="position:absolute; top:10px; left:10px; font-size:10px; font-weight:bold; color:#555;">RETRO WEB EXPLORER - v2025</div>
+            <div class="nav-controls" style="margin-left: 180px;">
+                <i class="fa-solid fa-arrow-left"></i>
+                <i class="fa-solid fa-arrow-right"></i>
+                <i class="fa-solid fa-rotate-right"></i>
+            </div>
+            <div class="address-bar">http://www.retroweb.net/home</div>
+            <div class="window-controls">
+                <div class="win-btn"></div>
+                <div class="win-btn"></div>
+            </div>
+        </div>
+
+        <div class="viewport">
+            <div class="sidebar">
+                
+                <div class="sidebar-btn btn-green">
+                    <i class="fa-solid fa-house"></i> Home
+                </div>
+                <div class="sidebar-btn btn-green">
+                    <i class="fa-solid fa-compass"></i> Explore
+                </div>
+                <div class="sidebar-btn btn-green">
+                    <i class="fa-solid fa-compact-disc"></i> Discover
+                </div>
+                <div class="sidebar-btn btn-green">
+                    <i class="fa-solid fa-brain"></i> Remember
+                </div>
+
+                <div class="spacer"></div>
+
+                <div class="sidebar-btn btn-pink">
+                    <i class="fa-solid fa-book"></i> My Library
+                </div>
+                <div class="sidebar-btn btn-green">
+                    <i class="fa-solid fa-border-all"></i> Create Playlist
+                </div>
+                <div class="sidebar-btn btn-green">
+                    <i class="fa-solid fa-heart"></i> Liked Songs
+                </div>
+
+                <div class="footer-socials">
+                    <div class="social-row">
+                        <div class="social-icon"><i class="fa-brands fa-facebook-f"></i></div>
+                        <div class="social-icon"><i class="fa-brands fa-xing"></i></div>
+                        <div class="social-icon"><i class="fa-brands fa-youtube"></i></div>
+                        <div class="social-icon"><i class="fa-solid fa-paper-plane"></i></div>
+                        <div class="social-icon"><i class="fa-solid fa-globe"></i></div>
+                    </div>
+                    <div class="copyright">© 2025 Retro Web Project</div>
+                </div>
+            </div>
+
+            <div class="content">
+                
+                <div class="hero">
+                    <h1 class="hero-title">WELCOME TO</h1>
+                    <h1 class="hero-title green">RETRO WEB</h1>
+                    <div class="hero-subtitle-box">
+                        Experience the nostalgic charm of vintage computing
+                    </div>
+                </div>
+
+                <div class="grid-section">
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            Explore
+                            <div class="win-icons"><div class="win-icon-box"></div><div class="win-icon-box"></div></div>
+                        </div>
+                        <div class="card-body">
+                            <div class="illustration-placeholder">
+                                <i class="fa-solid fa-computer"></i>
+                            </div>
+                            </div>
+                        <div class="card-btn-lg">EXPLORE</div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header green">
+                            Discover
+                            <div class="win-icons"><div class="win-icon-box"></div><div class="win-icon-box"></div></div>
+                        </div>
+                        <div class="card-body">
+                             <div class="illustration-placeholder">
+                                <i class="fa-regular fa-floppy-disk"></i>
+                            </div>
+                        </div>
+                        <div class="card-btn-lg">DISCOVER</div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            Remember
+                            <div class="win-icons"><div class="win-icon-box"></div><div class="win-icon-box"></div></div>
+                        </div>
+                        <div class="card-body">
+                             <div class="illustration-placeholder">
+                                <i class="fa-solid fa-window-restore"></i>
+                            </div>
+                        </div>
+                        <div class="card-btn-lg">REMEMBER</div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
