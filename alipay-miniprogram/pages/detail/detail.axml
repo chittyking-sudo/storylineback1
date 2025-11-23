@@ -1,0 +1,128 @@
+<view class="container">
+  
+  <!-- 加载中 -->
+  <view a:if="{{loading}}" class="loading">
+    <text>加载中...</text>
+  </view>
+
+  <!-- 项目详情 -->
+  <view a:elif="{{project}}" class="detail-content">
+    
+    <!-- 项目头部 -->
+    <view class="project-header">
+      <view class="project-title">{{project.name}}</view>
+      <view class="project-meta">
+        <view class="meta-item">
+          <text class="meta-label">游戏类型：</text>
+          <text class="meta-value">{{project.game_type_name}}</text>
+        </view>
+        <view class="meta-item">
+          <text class="meta-label">内容类型：</text>
+          <text class="meta-value">{{project.content_type_name}}</text>
+        </view>
+        <view class="meta-item">
+          <text class="meta-label">AI 模型：</text>
+          <text class="meta-value">{{project.ai_model_name}}</text>
+        </view>
+        <view class="meta-item">
+          <text class="meta-label">创建时间：</text>
+          <text class="meta-value">{{project.created_at}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 描述信息 -->
+    <view a:if="{{project.description}}" class="card">
+      <view class="card-title">📝 项目描述</view>
+      <view class="card-content">
+        <text class="description-text">{{project.description}}</text>
+      </view>
+    </view>
+
+    <!-- 生成的内容 -->
+    <view class="card">
+      <view class="card-header">
+        <text class="card-title">✨ 生成的内容</text>
+        <text class="copy-btn" onTap="copyContent">复制</text>
+      </view>
+      <view class="card-content">
+        <text class="content-text" selectable="true">{{project.content || project.generated_content || '暂无内容'}}</text>
+      </view>
+    </view>
+
+    <!-- 世界观内容（如果有） -->
+    <view a:if="{{project.worldview}}" class="card">
+      <view class="card-header">
+        <text class="card-title">🌍 世界观设定</text>
+        <text class="copy-btn" onTap="copyWorldview">复制</text>
+      </view>
+      <view class="card-content">
+        <view class="worldview-section">
+          <text class="section-title">标题</text>
+          <text class="section-content">{{project.worldview.title}}</text>
+        </view>
+        <view a:if="{{project.worldview.history}}" class="worldview-section">
+          <text class="section-title">历史背景</text>
+          <text class="section-content" selectable="true">{{project.worldview.history}}</text>
+        </view>
+        <view a:if="{{project.worldview.geography}}" class="worldview-section">
+          <text class="section-title">地理环境</text>
+          <text class="section-content" selectable="true">{{project.worldview.geography}}</text>
+        </view>
+        <view a:if="{{project.worldview.culture}}" class="worldview-section">
+          <text class="section-title">文化体系</text>
+          <text class="section-content" selectable="true">{{project.worldview.culture}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 角色信息（如果有） -->
+    <view a:if="{{project.characters && project.characters.length > 0}}" class="card">
+      <view class="card-title">👥 角色列表</view>
+      <view class="card-content">
+        <view a:for="{{project.characters}}" a:key="id" class="character-item">
+          <view class="character-header">
+            <text class="character-name">{{item.name}}</text>
+            <text class="character-role">{{item.role}}</text>
+          </view>
+          <view a:if="{{item.personality}}" class="character-detail">
+            <text class="detail-label">性格：</text>
+            <text class="detail-value">{{item.personality}}</text>
+          </view>
+          <view a:if="{{item.background}}" class="character-detail">
+            <text class="detail-label">背景：</text>
+            <text class="detail-value" selectable="true">{{item.background}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view class="action-buttons">
+      <button class="btn btn-secondary" onTap="shareProject">
+        <text>📤 分享项目</text>
+      </button>
+      <button class="btn btn-primary" onTap="exportProject">
+        <text>📥 导出内容</text>
+      </button>
+    </view>
+
+    <!-- 返回按钮 -->
+    <view class="back-button">
+      <button class="btn btn-secondary" onTap="goBack">
+        <text>← 返回列表</text>
+      </button>
+    </view>
+
+  </view>
+
+  <!-- 错误状态 -->
+  <view a:else class="empty-state">
+    <text class="empty-icon">❌</text>
+    <text class="empty-text">项目不存在或加载失败</text>
+    <button class="btn btn-primary mt-20" onTap="goBack">
+      <text>返回列表</text>
+    </button>
+  </view>
+
+</view>

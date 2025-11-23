@@ -1,0 +1,180 @@
+/* 项目详情页样式 */
+
+.detail-content {
+  padding-bottom: 40rpx;
+}
+
+/* 项目头部 */
+.project-header {
+  background: linear-gradient(135deg, var(--retro-blue) 0%, var(--retro-pink) 100%);
+  padding: 50rpx 30rpx;
+  border-radius: 16rpx;
+  margin-bottom: 40rpx;
+}
+
+.project-title {
+  font-size: 48rpx;
+  font-weight: bold;
+  color: #ffffff;
+  text-align: center;
+  margin-bottom: 30rpx;
+  text-shadow: 4rpx 4rpx 8rpx rgba(0, 0, 0, 0.2);
+}
+
+.project-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  font-size: 26rpx;
+  color: #ffffff;
+}
+
+.meta-label {
+  opacity: 0.8;
+  margin-right: 12rpx;
+}
+
+.meta-value {
+  font-weight: bold;
+}
+
+/* 卡片头部 */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.copy-btn {
+  font-size: 26rpx;
+  color: var(--retro-blue);
+  padding: 12rpx 24rpx;
+  border: 2rpx solid var(--retro-blue);
+  border-radius: 6rpx;
+  background: #ffffff;
+}
+
+/* 卡片内容 */
+.card-content {
+  padding: 20rpx 0;
+}
+
+.description-text,
+.content-text {
+  font-size: 28rpx;
+  color: var(--text-dark);
+  line-height: 1.8;
+  display: block;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+/* 世界观区块 */
+.worldview-section {
+  margin-bottom: 30rpx;
+  padding-bottom: 30rpx;
+  border-bottom: 2rpx solid #e0e0e0;
+}
+
+.worldview-section:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: var(--retro-pink);
+  display: block;
+  margin-bottom: 16rpx;
+}
+
+.section-content {
+  font-size: 28rpx;
+  color: var(--text-dark);
+  line-height: 1.8;
+  display: block;
+  white-space: pre-wrap;
+}
+
+/* 角色列表 */
+.character-item {
+  background: #ffffff;
+  border: 2rpx solid var(--border-color);
+  border-radius: 8rpx;
+  padding: 24rpx;
+  margin-bottom: 24rpx;
+}
+
+.character-item:last-child {
+  margin-bottom: 0;
+}
+
+.character-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16rpx;
+  padding-bottom: 16rpx;
+  border-bottom: 2rpx solid #e0e0e0;
+}
+
+.character-name {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: var(--retro-pink);
+}
+
+.character-role {
+  font-size: 24rpx;
+  color: var(--text-light);
+  background: var(--bg-beige);
+  padding: 8rpx 16rpx;
+  border-radius: 6rpx;
+}
+
+.character-detail {
+  display: flex;
+  font-size: 26rpx;
+  margin-bottom: 12rpx;
+  line-height: 1.6;
+}
+
+.character-detail:last-child {
+  margin-bottom: 0;
+}
+
+.detail-label {
+  color: var(--text-light);
+  margin-right: 12rpx;
+  flex-shrink: 0;
+}
+
+.detail-value {
+  color: var(--text-dark);
+  flex: 1;
+}
+
+/* 操作按钮 */
+.action-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20rpx;
+  margin-top: 40rpx;
+}
+
+.back-button {
+  margin-top: 30rpx;
+}
+
+/* 空状态优化 */
+.empty-state {
+  padding: 120rpx 40rpx;
+}
