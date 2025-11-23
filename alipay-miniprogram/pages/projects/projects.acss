@@ -1,0 +1,98 @@
+/* 项目列表页样式 */
+
+.page-title {
+  font-size: 48rpx;
+  font-weight: bold;
+  color: var(--text-primary);
+  margin-bottom: 30rpx;
+  padding: 0 30rpx;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 400rpx;
+  color: var(--text-secondary);
+}
+
+/* 项目卡片 */
+.project-card {
+  background: #ffffff;
+  border: 2rpx solid var(--border-color);
+  border-radius: 12rpx;
+  padding: 30rpx;
+  margin: 0 30rpx 20rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.project-card:active {
+  transform: scale(0.98);
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.12);
+}
+
+.project-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: var(--text-primary);
+  margin-bottom: 16rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.project-desc {
+  display: flex;
+  align-items: center;
+  font-size: 28rpx;
+  color: var(--text-secondary);
+  margin-bottom: 12rpx;
+  flex-wrap: wrap;
+}
+
+.project-desc text {
+  margin-right: 8rpx;
+}
+
+.divider {
+  margin: 0 12rpx;
+  color: var(--border-color);
+}
+
+.project-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 24rpx;
+  color: var(--text-tertiary);
+  margin-top: 12rpx;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 500rpx;
+  padding: 60rpx;
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 120rpx;
+  margin-bottom: 30rpx;
+  opacity: 0.5;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 40rpx;
+}
+
+.mt-20 {
+  margin-top: 20rpx;
+}
