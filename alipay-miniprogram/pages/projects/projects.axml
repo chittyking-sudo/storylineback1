@@ -1,0 +1,32 @@
+<view class="container">
+  <view class="page-title">我的项目</view>
+
+  <!-- 加载中 -->
+  <view a:if="{{loading}}" class="loading">
+    <text>加载中...</text>
+  </view>
+
+  <!-- 项目列表 -->
+  <view a:elif="{{projects.length > 0}}">
+    <view a:for="{{projects}}" a:key="id" class="project-card" onTap="viewDetail" data-id="{{item.id}}">
+      <view class="project-title">{{item.name}}</view>
+      <view class="project-desc">
+        <text>类型: {{item.game_type_name}}</text>
+        <text class="divider">•</text>
+        <text>内容: {{item.content_type_name}}</text>
+      </view>
+      <view class="project-meta">
+        <text>🕐 {{item.created_at}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view a:else class="empty-state">
+    <text class="empty-icon">📂</text>
+    <text class="empty-text">暂无项目，点击底部「创建」开始生成内容</text>
+    <view class="btn btn-primary mt-20" onTap="goToCreate">
+      <text>创建项目</text>
+    </view>
+  </view>
+</view>

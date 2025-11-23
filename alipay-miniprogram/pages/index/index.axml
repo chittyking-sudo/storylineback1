@@ -1,0 +1,92 @@
+<view class="container">
+  <!-- Hero 区域 -->
+  <view class="hero">
+    <text class="hero-title">游戏内容生成器</text>
+    <text class="hero-subtitle">AI 驱动的游戏内容创作工具</text>
+  </view>
+
+  <!-- 功能介绍 -->
+  <view class="card">
+    <view class="card-title">✨ 核心功能</view>
+    <view class="feature-list">
+      <view class="feature-item">
+        <text class="feature-icon">🎮</text>
+        <view class="feature-content">
+          <text class="feature-title">智能生成</text>
+          <text class="feature-desc">基于 AI 技术自动生成游戏内容</text>
+        </view>
+      </view>
+      <view class="feature-item">
+        <text class="feature-icon">🌍</text>
+        <view class="feature-content">
+          <text class="feature-title">世界观设定</text>
+          <text class="feature-desc">构建完整的游戏世界观体系</text>
+        </view>
+      </view>
+      <view class="feature-item">
+        <text class="feature-icon">👥</text>
+        <view class="feature-content">
+          <text class="feature-title">角色创建</text>
+          <text class="feature-desc">生成丰富的角色背景和性格</text>
+        </view>
+      </view>
+      <view class="feature-item">
+        <text class="feature-icon">📖</text>
+        <view class="feature-content">
+          <text class="feature-title">剧情编写</text>
+          <text class="feature-desc">打造引人入胜的游戏剧情</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 统计信息 -->
+  <view class="card">
+    <view class="card-title">📊 使用统计</view>
+    <view class="stats-grid">
+      <view class="stat-item">
+        <text class="stat-value">{{projectCount}}</text>
+        <text class="stat-label">已创建项目</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-value">10+</text>
+        <text class="stat-label">游戏类型</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-value">8+</text>
+        <text class="stat-label">内容类型</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-value">4</text>
+        <text class="stat-label">AI 模型</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 快速开始 -->
+  <view class="card">
+    <view class="card-title">🚀 快速开始</view>
+    <view class="action-list">
+      <view class="btn btn-primary" onTap="goToCreate">
+        <text>✨ 立即创建项目</text>
+      </view>
+      <view class="btn btn-secondary mt-10" onTap="goToProjects">
+        <text>📂 查看我的项目</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 关于 -->
+  <view class="card">
+    <view class="card-title">ℹ️ 关于</view>
+    <view class="about-content">
+      <text class="about-text">游戏内容生成器是一款基于 AI 技术的游戏内容创作工具，帮助游戏开发者和创作者快速生成高质量的游戏内容。</text>
+      <view class="about-links">
+        <text class="link-item" onTap="openGitHub">GitHub 开源</text>
+        <text class="link-divider">|</text>
+        <text class="link-item" onTap="checkHealth">检查服务</text>
+      </view>
+      <text class="version">版本 v3.0</text>
+    </view>
+  </view>
+</view>

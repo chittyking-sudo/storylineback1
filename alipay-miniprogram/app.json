@@ -1,0 +1,40 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/create/create",
+    "pages/projects/projects",
+    "pages/detail/detail"
+  ],
+  "window": {
+    "defaultTitle": "游戏内容生成器",
+    "titleBarColor": "#f0d7b7",
+    "pullRefresh": false,
+    "allowsBounceVertical": "YES"
+  },
+  "tabBar": {
+    "textColor": "#666666",
+    "selectedColor": "#e66285",
+    "backgroundColor": "#f0d7b7",
+    "borderStyle": "black",
+    "items": [
+      {
+        "pagePath": "pages/index/index",
+        "name": "首页",
+        "icon": "assets/images/home.png",
+        "activeIcon": "assets/images/home-active.png"
+      },
+      {
+        "pagePath": "pages/create/create",
+        "name": "创建",
+        "icon": "assets/images/create.png",
+        "activeIcon": "assets/images/create-active.png"
+      },
+      {
+        "pagePath": "pages/projects/projects",
+        "name": "项目",
+        "icon": "assets/images/projects.png",
+        "activeIcon": "assets/images/projects-active.png"
+      }
+    ]
+  }
+}
